@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Jerry · 测试工程作品集</title>
+<!--
+  Jerry / @jerry00007 · 高级测试开发工程师作品集 · Editorial Blueprint 风格
+  CSS 变量体系 / 报头 / 分节 / 卡片 / 噪点网格背景 / rise 入场动画
+  均复用自 pushmysqldiff 门户模板，保持视觉一致。
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,900&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#f5f2ec; --ink:#2b2620; --ink2:#6b6357; --line:#d8d2c4;
+  --terra:#c2553d; --terra-bg:#f3ded7; --forest:#4a7c59; --forest-bg:#e5eee5;
+  --gold:#b8860b; --gold-bg:#f4ecd6; --card:#fdfcf9; --card2:#faf8f2;
+  --serif:'Fraunces',Georgia,'Songti SC',serif;
+  --sans:'Plus Jakarta Sans','PingFang SC','Microsoft YaHei',sans-serif;
+  --mono:'JetBrains Mono','Menlo','Consolas',monospace;
+  color-scheme:light;
+}
+body{font-family:var(--sans);color:var(--ink);min-height:100vh;font-size:13px;line-height:1.55;
+  background-color:var(--paper);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E"),
+  linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:120px 120px,40px 40px,40px 40px;
+  padding-bottom:72px}
+::selection{background:var(--terra-bg);color:var(--ink)}
+
+/* ── 报头 ── */
+.masthead{padding:52px 26px 0;max-width:1180px;margin:0 auto}
+.mast-kicker{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  animation:rise .5s ease both}
+.mast-kicker .rule{flex:1;height:1.5px;background:var(--ink);min-width:40px}
+.mast-no{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2.5px;color:var(--terra);
+  border:1.5px solid var(--terra);border-radius:4px;padding:3px 10px;white-space:nowrap}
+.mast-kicker .meta{font-family:var(--mono);font-size:10.5px;letter-spacing:1.2px;color:var(--ink2);white-space:nowrap}
+.mast-title{font-family:var(--serif);font-weight:900;font-size:clamp(30px,5.4vw,52px);letter-spacing:.5px;
+  line-height:1.08;margin-top:20px;animation:rise .5s ease .08s both}
+.mast-title em{font-style:italic;color:var(--terra)}
+.mast-sub{margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--ink2);letter-spacing:.6px;
+  display:flex;gap:14px;flex-wrap:wrap;align-items:center;animation:rise .5s ease .16s both}
+.mast-sub b{color:var(--ink);font-weight:700}
+.mast-sub .dot{width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.mast-note{margin-top:18px;border-left:3px solid var(--gold);padding:2px 0 2px 12px;font-size:12px;color:var(--ink2);
+  animation:rise .5s ease .22s both}
+.mast-note b{color:#8a6508}
+.mast-note a{color:var(--terra);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--terra)}
+.mast-note a:hover{border-bottom-style:solid}
+
+/* ── 分节 ── */
+.sec{max-width:1180px;margin:38px auto 0;padding:0 26px;animation:rise .55s ease both}
+.sec:nth-of-type(1){animation-delay:.28s}
+.sec:nth-of-type(2){animation-delay:.38s}
+.sec:nth-of-type(3){animation-delay:.48s}
+.sec:nth-of-type(4){animation-delay:.58s}
+.sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1.5px solid var(--ink);padding-bottom:7px;margin-bottom:18px;flex-wrap:wrap}
+.sec-no{font-family:var(--mono);color:var(--terra);font-size:12px;font-weight:700;letter-spacing:1.5px}
+.sec-title{font-family:var(--serif);font-weight:900;font-size:21px;letter-spacing:.3px}
+.sec-note{margin-left:auto;font-size:10.5px;color:var(--ink2);font-family:var(--mono);letter-spacing:.4px}
+
+/* ── 指标卡 ── */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat{border:1.5px solid var(--ink);border-radius:10px;background:var(--card);padding:16px 20px 15px;
+  transition:box-shadow .18s ease,transform .18s ease;position:relative}
+.stat::after{content:'';position:absolute;inset:7px;border:1px dashed transparent;border-radius:6px;
+  transition:border-color .18s ease;pointer-events:none}
+.stat:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(43,38,32,.15)}
+.stat:hover::after{border-color:var(--line)}
+.stat-top{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);
+  font-size:9.5px;font-weight:700;letter-spacing:1.2px;color:var(--ink2)}
+.stat-top .no{color:var(--gold);letter-spacing:.8px}
+.stat-num{font-family:var(--serif);font-weight:900;font-size:38px;line-height:1.05;letter-spacing:.5px;margin-top:10px}
+.stat-num .unit{font-family:var(--serif);font-style:italic;font-weight:900;font-size:21px;color:var(--terra);margin-left:2px}
+.stat-sub{margin-top:6px;font-size:11.5px;color:var(--ink2);line-height:1.5}
+.stat-sub .m{font-family:var(--mono);font-size:10.5px}
+
+/* ── 作品卡 ── */
+.work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.tcard{display:flex;flex-direction:column;gap:10px;border:1.5px solid var(--ink);border-radius:10px;
+  background:var(--card);padding:18px 20px 16px;text-decoration:none;color:var(--ink);
+  transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease;position:relative}
+.tcard::after{content:'';position:absolute;inset:7px;border:1px dashed transparent;border-radius:6px;
+  transition:border-color .18s ease;pointer-events:none}
+.tcard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(43,38,32,.15);border-color:var(--ink)}
+.tcard:hover::after{border-color:var(--line)}
+.tcard .row1{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.exp-chip{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;padding:2px 10px;
+  border-radius:4px;border:1.5px solid;white-space:nowrap}
+.exp-chip.perf{color:var(--terra);border-color:var(--terra);background:var(--terra-bg)}
+.exp-chip.ai{color:var(--gold);border-color:var(--gold);background:var(--gold-bg)}
+.exp-chip.platform{color:var(--forest);border-color:var(--forest);background:var(--forest-bg)}
+.exp-chip.tool{color:var(--forest);border-color:var(--forest);background:var(--forest-bg)}
+.host-chip{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.6px;padding:2px 8px;
+  border-radius:4px;border:1px solid var(--line);background:var(--paper);color:var(--ink2);white-space:nowrap}
+.tcard .name{font-family:var(--serif);font-weight:900;font-size:19px;letter-spacing:.3px;line-height:1.25}
+.tcard .desc{font-size:12px;color:var(--ink2);line-height:1.7;flex:1}
+.tcard .desc .m{font-family:var(--mono);font-size:11px;color:var(--ink)}
+.tcard .open{display:flex;align-items:center;gap:7px;margin-top:4px;padding-top:11px;border-top:1px solid var(--line);
+  font-weight:800;font-size:12.5px;color:var(--terra)}
+.tcard .open .arr{font-family:var(--mono);transition:transform .18s ease}
+.tcard:hover .open .arr{transform:translateX(5px)}
+.tcard.ai-tint:hover .open{color:var(--gold)}
+.tcard.platform-tint:hover .open,.tcard.tool-tint:hover .open{color:var(--forest)}
+.tcard .foot{display:flex;align-items:center;gap:7px;margin-top:4px;padding-top:11px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.6px;color:var(--ink2)}
+
+/* ── 技能矩阵卡 ── */
+.skill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.scard{display:block;border:1.5px solid var(--ink);border-radius:10px;background:var(--card);
+  padding:14px 16px 13px;text-decoration:none;color:var(--ink);
+  transition:box-shadow .18s ease,transform .18s ease;position:relative}
+.scard::after{content:'';position:absolute;inset:6px;border:1px dashed transparent;border-radius:6px;
+  transition:border-color .18s ease;pointer-events:none}
+.scard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(43,38,32,.15)}
+.scard:hover::after{border-color:var(--line)}
+.scard .s-dir{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.6px;color:var(--gold);
+  display:flex;align-items:center;gap:8px}
+.scard .s-dir::before{content:'';width:6px;height:6px;background:var(--gold);flex:none}
+.scard .s-name{font-family:var(--serif);font-weight:900;font-size:15.5px;letter-spacing:.3px;margin-top:7px;line-height:1.3}
+.scard .s-desc{font-size:11.5px;color:var(--ink2);line-height:1.6;margin-top:4px}
+.scard .s-arr{position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:13px;font-weight:700;
+  color:var(--terra);opacity:0;transform:translateX(-4px);transition:opacity .18s ease,transform .18s ease}
+.scard:hover .s-arr{opacity:1;transform:translateX(0)}
+
+/* ── 方法论卡 ── */
+.meth-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.mcard{border:1.5px solid var(--ink);border-radius:10px;background:var(--card);padding:16px 20px;
+  transition:box-shadow .18s ease,transform .18s ease;position:relative}
+.mcard::after{content:'';position:absolute;inset:7px;border:1px dashed transparent;border-radius:6px;
+  transition:border-color .18s ease;pointer-events:none}
+.mcard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(43,38,32,.15)}
+.mcard:hover::after{border-color:var(--line)}
+.m-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.m-idx{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--terra)}
+.m-title{font-family:var(--serif);font-weight:900;font-size:18px;letter-spacing:.3px}
+.m-en{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:1.2px;color:var(--ink2)}
+.m-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.mtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.3px;padding:3px 10px;border-radius:4px;
+  border:1px solid var(--line);background:var(--card2);color:var(--ink2)}
+.mtag.hot{border-color:var(--terra);color:var(--terra);background:var(--terra-bg)}
+.mtag.gold{border-color:var(--gold);color:#8a6508;background:var(--gold-bg)}
+.mtag.forest{border-color:var(--forest);color:var(--forest);background:var(--forest-bg)}
+
+/* ── 页脚 ── */
+.footer{max-width:1180px;margin:46px auto 0;padding:0 26px;animation:rise .55s ease .68s both}
+.extend{border:1.5px solid var(--forest);background:var(--forest-bg);border-radius:9px;padding:12px 16px;
+  font-size:12.5px;font-weight:700;color:#33593f;display:flex;gap:10px;align-items:flex-start}
+.extend .wtag{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:2px 8px;border-radius:3px;
+  background:var(--forest);color:#fff;white-space:nowrap;margin-top:1px}
+.extend em{font-family:var(--serif);font-style:italic;font-weight:900}
+.foot-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-family:var(--mono);font-size:10.5px;
+  color:var(--ink2);letter-spacing:.4px;align-items:center}
+.foot-meta .rule{flex:1;height:1px;background:var(--line);min-width:30px}
+.foot-meta a{color:var(--ink);text-decoration:none;border-bottom:1px dashed var(--line)}
+.foot-meta a:hover{color:var(--terra);border-bottom-color:var(--terra)}
+
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media (max-width:960px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .skill-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .masthead{padding-top:36px}
+  .stat-grid{grid-template-columns:1fr}
+  .work-grid{grid-template-columns:1fr}
+  .skill-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="mast-kicker">
+    <span class="mast-no">PORTFOLIO · 2026</span>
+    <span class="rule"></span>
+    <span class="meta">TEST ENGINEERING · AI QUALITY</span>
+  </div>
+  <h1 class="mast-title">测试工程 · <em>作品集</em></h1>
+  <div class="mast-sub">
+    <span><b>Jerry</b> · 高级测试开发工程师 / 测试专家</span>
+    <span class="dot"></span>
+    <span>16 年测试经验</span>
+    <span class="dot"></span>
+    <span>性能工程</span>
+    <span class="dot"></span>
+    <span>测试平台</span>
+    <span class="dot"></span>
+    <span>AI 质量工程</span>
+  </div>
+  <p class="mast-note"><b>数据声明</b> — 本页所有数据来自真实项目实测，工具链均已开源 — <a href="https://github.com/jerry00007/ai-testing-skills" target="_blank" rel="noopener">github.com/jerry00007/ai-testing-skills</a></p>
+</header>
+
+<section class="sec">
+  <div class="sec-head">
+    <span class="sec-no">§ 01</span><span class="sec-title">核心指标</span>
+    <span class="sec-note">KEY METRICS · measured in production</span>
+  </div>
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-top"><span>EXPERIENCE</span><span class="no">№ 01</span></div>
+      <div class="stat-num">16<span class="unit">年</span></div>
+      <div class="stat-sub">测试经验 · 2010 至今</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span>TCP CONNECTIONS</span><span class="no">№ 02</span></div>
+      <div class="stat-num">103<span class="unit">万</span></div>
+      <div class="stat-sub">仿真 TCP 长连接（实测）</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span>PEAK QPS</span><span class="no">№ 03</span></div>
+      <div class="stat-num">100<span class="unit">万+</span></div>
+      <div class="stat-sub">压测峰值 QPS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span>AI SPEED-UP</span><span class="no">№ 04</span></div>
+      <div class="stat-num">25<span class="unit">×</span></div>
+      <div class="stat-sub">AI 用例编写提速（<span class="m">4h → 10min</span>）</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span>API COVERAGE</span><span class="no">№ 05</span></div>
+      <div class="stat-num">80<span class="unit">%+</span></div>
+      <div class="stat-sub">业务线接口自动化覆盖</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span>OPEN SOURCE</span><span class="no">№ 06</span></div>
+      <div class="stat-num">9<span class="unit">个</span></div>
+      <div class="stat-sub">开源 AI 测试 Skill</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-head">
+    <span class="sec-no">§ 02</span><span class="sec-title">代表作品</span>
+    <span class="sec-note">SELECTED WORKS · 2018—2026</span>
+  </div>
+  <div class="work-grid">
+    <a class="tcard" href="https://github.com/jerry00007" target="_blank" rel="noopener">
+      <div class="row1"><span class="exp-chip perf">PERF</span><span class="host-chip">2020—2024 · 五代演进</span></div>
+      <div class="name">全链路仿真压测系统 · locust-boomer-toolkit</div>
+      <div class="desc">Locust + Boomer(Go) 自研仿真压测系统：<span class="m">1 TCP 连接 = 1 真实用户</span>、动态 QPS 剧本压测（令牌桶 + 时间窗口）、WebSocket 状态机编排、Kafka 自动对账。实测 <span class="m">103 万</span>连接 / 秒杀 <span class="m">QPS 12.3 万</span> / <span class="m">P99 387ms</span> / 错误率 <span class="m">0.03%</span>；压测定位并修复网关热点、Redis 连接池、DB 死锁等瓶颈。五代演进（2020-2024）。</div>
+      <div class="open">GitHub · locust-boomer-toolkit <span class="arr">→</span></div>
+    </a>
+    <a class="tcard ai-tint" href="https://github.com/jerry00007/ai-testing-skills" target="_blank" rel="noopener">
+      <div class="row1"><span class="exp-chip ai">AI</span><span class="host-chip">9 SKILLS · 全流程</span></div>
+      <div class="name">AI 测试全链路技能集 · ai-testing-skills</div>
+      <div class="desc">9 个 OpenCode/Claude Code Skill 覆盖测试全流程：三剑客需求评审（问题发现率 <span class="m">10%→60%</span>）、10 维度用例生成 + 量化门禁、脚本自动执行 + Bug 归因决策树、IEEE 829 测试报告。用例编写 <span class="m">25 倍</span>提速、全流程 <span class="m">3 天 → 半天</span>，含《AI 驱动测试全流程方法论》（11 Phase）。</div>
+      <div class="open">GitHub · jerry00007/ai-testing-skills <span class="arr">→</span></div>
+    </a>
+    <div class="tcard platform-tint">
+      <div class="row1"><span class="exp-chip platform">PLATFORM</span><span class="host-chip">Django + Celery · 8.2 万行</span></div>
+      <div class="name">自动化测试一体化平台</div>
+      <div class="desc">Django + Celery 一体化测试平台：<span class="m">34 模块 / 8.2 万行</span>代码，覆盖接口回归、UI 自动化、性能测试、线上监控、Mock 服务（API/Router/Response 三级模型）、接口覆盖率、质量数据看板；集成 HttpRunner/Appium/Selenium/Locust/Jenkins/钉钉告警，Docker 化部署服务多条业务线。（内部平台，未开源）</div>
+      <div class="foot">内部平台 · 2018—2020</div>
+    </div>
+    <div class="tcard tool-tint">
+      <div class="row1"><span class="exp-chip tool">TOOL</span><span class="host-chip">Flask · 5 蓝图 · 8 类工具</span></div>
+      <div class="name">PM 一站式验收平台</div>
+      <div class="desc">面向产品经理的自助验收门户：Flask + 5 蓝图聚合 8 类工具（推送对比 / Hive 中间链路 recall-rank-predict 三层对比 / 5 个 AB 实验验收台）；MySQL 只读 guard + 出站白名单 + 正则校验三层安全；gunicorn preload 启动提速 <span class="m">10×</span>，仅 <span class="m">3 个</span>第三方依赖。</div>
+      <div class="foot">内部平台 · 线上运行</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-head">
+    <span class="sec-no">§ 03</span><span class="sec-title">开源技能矩阵</span>
+    <span class="sec-note">OPEN-SOURCE SKILLS · github.com/jerry00007/ai-testing-skills</span>
+  </div>
+  <div class="skill-grid">
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/three-musketeers" target="_blank" rel="noopener">
+      <div class="s-dir">three-musketeers</div>
+      <div class="s-name">三剑客需求评审</div>
+      <div class="s-desc">产品 / 架构 / QA + 红蓝对抗</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/requirement-review" target="_blank" rel="noopener">
+      <div class="s-dir">requirement-review</div>
+      <div class="s-name">PRD 评审</div>
+      <div class="s-desc">知识库交叉验证协议</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/test-case-generator" target="_blank" rel="noopener">
+      <div class="s-dir">test-case-generator</div>
+      <div class="s-name">用例生成</div>
+      <div class="s-desc">10 维度 + 6 项量化门禁</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/api-test-auto-runner" target="_blank" rel="noopener">
+      <div class="s-dir">api-test-auto-runner</div>
+      <div class="s-name">自动执行</div>
+      <div class="s-desc">Bug 归因决策树</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/rcm-test-generator" target="_blank" rel="noopener">
+      <div class="s-dir">rcm-test-generator</div>
+      <div class="s-name">推荐系统测试</div>
+      <div class="s-desc">exp_info / test_api / test_log 三件套</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/test-result-analysis" target="_blank" rel="noopener">
+      <div class="s-dir">test-result-analysis</div>
+      <div class="s-name">结果分析</div>
+      <div class="s-desc">证据驱动基线对比</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/test-feedback-doc" target="_blank" rel="noopener">
+      <div class="s-dir">test-feedback-doc</div>
+      <div class="s-name">反馈文档</div>
+      <div class="s-desc">四要素齐全 Go/No-Go 先行</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/test-report-generator" target="_blank" rel="noopener">
+      <div class="s-dir">test-report-generator</div>
+      <div class="s-name">测试报告</div>
+      <div class="s-desc">IEEE 829 / Minto 金字塔</div>
+      <span class="s-arr">→</span>
+    </a>
+    <a class="scard" href="https://github.com/jerry00007/ai-testing-skills/tree/main/code-review" target="_blank" rel="noopener">
+      <div class="s-dir">code-review</div>
+      <div class="s-name">代码审查</div>
+      <div class="s-desc">多视角 + 定级校准</div>
+      <span class="s-arr">→</span>
+    </a>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-head">
+    <span class="sec-no">§ 04</span><span class="sec-title">方法论沉淀</span>
+    <span class="sec-note">METHODOLOGY · distilled from practice</span>
+  </div>
+  <div class="meth-grid">
+    <div class="mcard">
+      <div class="m-head">
+        <span class="m-idx">M·01</span><span class="m-title">全链路压测</span>
+        <span class="m-en">FULL-LINK LOAD TESTING</span>
+      </div>
+      <div class="m-tags">
+        <span class="mtag hot">影子库三粒度</span>
+        <span class="mtag">流量染色</span>
+        <span class="mtag">录制回放</span>
+        <span class="mtag">4 阶段流程（准备→预热→阶梯→复盘）</span>
+        <span class="mtag">7 大踩坑库</span>
+      </div>
+    </div>
+    <div class="mcard">
+      <div class="m-head">
+        <span class="m-idx">M·02</span><span class="m-title">AI 测试全流程</span>
+        <span class="m-en">AI-DRIVEN TESTING · 11 PHASE</span>
+      </div>
+      <div class="m-tags">
+        <span class="mtag gold">11 Phase 规范</span>
+        <span class="mtag">需求评审→用例生成→Code Review→需求×代码交叉验证→自动化→归因→反馈→回归→报告</span>
+      </div>
+    </div>
+    <div class="mcard">
+      <div class="m-head">
+        <span class="m-idx">M·03</span><span class="m-title">数据驱动质量</span>
+        <span class="m-en">DATA-DRIVEN QUALITY</span>
+      </div>
+      <div class="m-tags">
+        <span class="mtag forest">4300+ 条缺陷数据</span>
+        <span class="mtag">测试分级</span>
+        <span class="mtag">免测红线</span>
+        <span class="mtag">CI-CD 发布门禁</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="extend">
+    <span class="wtag">沉淀</span>
+    <span><em>找bug不如找规律</em> — 所有方法论与工具均已沉淀为可复用资产</span>
+  </div>
+  <div class="foot-meta">
+    <span>© 2026 Jerry</span>
+    <span><a href="https://github.com/jerry00007" target="_blank" rel="noopener">github.com/jerry00007</a></span>
+    <span class="rule"></span>
+    <span>Editorial Blueprint Style</span>
+  </div>
+</footer>
+
+</body>
+</html>
