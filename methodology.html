@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 驱动的测试全流程方法论</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f5f2ec;
+    color: #1c1c28;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(28,28,40,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(28,28,40,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* === HERO === */
+  .hero {
+    text-align: center;
+    padding: 60px 0 80px;
+    border-bottom: 1.5px solid #d4d0c8;
+    margin-bottom: 60px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #8a8580;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 600;
+    color: #c2553d;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: #6b6b6b;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #8a8580;
+  }
+
+  .hero-meta span::before {
+    content: '◆ ';
+    color: #b8860b;
+  }
+
+  /* === SECTION LABEL === */
+  .section-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8a8580;
+    margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: '§ ';
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  /* === SECTION === */
+  section {
+    margin-bottom: 64px;
+    animation: fadeUp 0.6s ease-out backwards;
+  }
+
+  section:nth-child(1) { animation-delay: 0.1s; }
+  section:nth-child(2) { animation-delay: 0.15s; }
+  section:nth-child(3) { animation-delay: 0.2s; }
+  section:nth-child(4) { animation-delay: 0.25s; }
+  section:nth-child(5) { animation-delay: 0.3s; }
+  section:nth-child(6) { animation-delay: 0.35s; }
+  section:nth-child(7) { animation-delay: 0.4s; }
+  section:nth-child(8) { animation-delay: 0.45s; }
+  section:nth-child(9) { animation-delay: 0.5s; }
+
+  section h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1.5px solid #d4d0c8;
+    letter-spacing: -0.5px;
+  }
+
+  section h2 em {
+    font-style: italic;
+    color: #4a7c59;
+    font-weight: 600;
+  }
+
+  section h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 36px;
+    margin-bottom: 14px;
+    color: #1c1c28;
+  }
+
+  section h4 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    color: #c2553d;
+  }
+
+  section p {
+    margin-bottom: 16px;
+    color: #1c1c28;
+  }
+
+  section ul, section ol {
+    margin-bottom: 16px;
+    padding-left: 24px;
+  }
+
+  section li {
+    margin-bottom: 8px;
+  }
+
+  /* === BLOCKQUOTE === */
+  blockquote {
+    background: rgba(255,255,255,0.5);
+    border-left: 3px solid #c2553d;
+    padding: 20px 28px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  blockquote p {
+    margin-bottom: 8px;
+  }
+
+  blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  blockquote strong {
+    color: #c2553d;
+  }
+
+  /* === TABLE === */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1.5px solid #d4d0c8;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.5);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  thead {
+    background: rgba(28,28,40,0.04);
+  }
+
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6b6b6b;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1.5px solid #d4d0c8;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e8e4dc;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background: rgba(28,28,40,0.02);
+  }
+
+  /* === CARD === */
+  .card {
+    background: rgba(255,255,255,0.5);
+    border: 1.5px solid #d4d0c8;
+    border-radius: 4px;
+    padding: 28px;
+    margin: 24px 0;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(28,28,40,0.08);
+  }
+
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  /* === CODE === */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    background: rgba(28,28,40,0.06);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #c2553d;
+  }
+
+  pre {
+    background: rgba(28,28,40,0.04);
+    border: 1.5px solid #d4d0c8;
+    border-radius: 4px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 24px 0;
+    line-height: 1.6;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: #1c1c28;
+    font-size: 12.5px;
+  }
+
+  /* === PIPELINE VISUAL === */
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 32px 0;
+    align-items: stretch;
+  }
+
+  .pipeline-phase {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px 12px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .pipeline-phase:hover {
+    transform: translateY(-3px);
+  }
+
+  .pipeline-phase .phase-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #8a8580;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .pipeline-phase .phase-name {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .pipeline-phase .phase-skill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #b8860b;
+    margin-top: 4px;
+  }
+
+  .pipeline-arrow {
+    display: flex;
+    align-items: center;
+    color: #d4d0c8;
+    font-size: 20px;
+    padding: 0 2px;
+  }
+
+  /* Phase colors */
+  .p-review { background: rgba(194,85,61,0.06); border-radius: 4px; }
+  .p-generate { background: rgba(74,124,89,0.06); border-radius: 4px; }
+  .p-review-code { background: rgba(184,134,11,0.06); border-radius: 4px; }
+  .p-cross { background: rgba(194,85,61,0.06); border-radius: 4px; }
+  .p-exec { background: rgba(74,124,89,0.06); border-radius: 4px; }
+  .p-report { background: rgba(184,134,11,0.06); border-radius: 4px; }
+
+  /* === BADGE === */
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin: 0 2px;
+  }
+
+  .badge-red { background: rgba(194,85,61,0.12); color: #c2553d; }
+  .badge-green { background: rgba(74,124,89,0.12); color: #4a7c59; }
+  .badge-gold { background: rgba(184,134,11,0.12); color: #b8860b; }
+  .badge-gray { background: rgba(28,28,40,0.06); color: #6b6b6b; }
+
+  /* === GATE === */
+  .gate {
+    background: rgba(194,85,61,0.06);
+    border: 1.5px solid rgba(194,85,61,0.2);
+    border-radius: 4px;
+    padding: 16px 24px;
+    margin: 20px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .gate-yellow {
+    background: rgba(184,134,11,0.06);
+    border-color: rgba(184,134,11,0.2);
+  }
+
+  .gate-green {
+    background: rgba(74,124,89,0.06);
+    border-color: rgba(74,124,89,0.2);
+  }
+
+  .gate-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .gate-content {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .gate-content strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* === DECISION TREE === */
+  .tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .tree .branch { color: #6b6b6b; }
+  .tree .yes { color: #4a7c59; }
+  .tree .no { color: #c2553d; }
+  .tree .bug { color: #c2553d; font-weight: 600; }
+
+  /* === MATRIX === */
+  .matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 1.5px solid #d4d0c8;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .matrix-cell {
+    padding: 16px 20px;
+    border-right: 1px solid #e8e4dc;
+    border-bottom: 1px solid #e8e4dc;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+
+  .matrix-cell.header {
+    background: rgba(28,28,40,0.04);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6b6b6b;
+    font-weight: 600;
+  }
+
+  .matrix-cell.corner {
+    background: rgba(28,28,40,0.04);
+  }
+
+  .matrix-cell .icon {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .matrix-cell .action {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #b8860b;
+    margin-top: 6px;
+  }
+
+  /* === SUMMARY BOX === */
+  .summary-box {
+    background: rgba(255,255,255,0.6);
+    border: 1.5px solid #d4d0c8;
+    border-radius: 4px;
+    padding: 36px;
+    margin: 40px 0;
+  }
+
+  .summary-box h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    margin-top: 0;
+  }
+
+  .summary-box .summary-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 700;
+    color: #c2553d;
+    margin-right: 8px;
+  }
+
+  .summary-box ol {
+    padding-left: 0;
+    list-style: none;
+    counter-reset: summary-counter;
+  }
+
+  .summary-box ol li {
+    counter-increment: summary-counter;
+    padding: 12px 0 12px 48px;
+    position: relative;
+    border-bottom: 1px solid #e8e4dc;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  .summary-box ol li:last-child {
+    border-bottom: none;
+  }
+
+  .summary-box ol li::before {
+    content: counter(summary-counter);
+    position: absolute;
+    left: 0;
+    top: 10px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 700;
+    color: #c2553d;
+  }
+
+  /* === CHECKLIST === */
+  .checklist {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .checklist li {
+    padding-left: 28px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  .checklist li::before {
+    content: '☐';
+    position: absolute;
+    left: 0;
+    font-size: 16px;
+    color: #4a7c59;
+  }
+
+  /* === TAG === */
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: rgba(28,28,40,0.06);
+    color: #6b6b6b;
+    margin-right: 4px;
+  }
+
+  /* === FOOTER === */
+  footer {
+    text-align: center;
+    padding: 60px 0 20px;
+    border-top: 1.5px solid #d4d0c8;
+    margin-top: 80px;
+  }
+
+  footer p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #8a8580;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  footer em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: #1c1c28;
+    text-transform: none;
+    letter-spacing: 0;
+    display: block;
+    margin-top: 8px;
+  }
+
+  /* === ANIMATION === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === SVG DIAGRAMS === */
+  .svg-diagram {
+    width: 100%;
+    max-width: 860px;
+    margin: 32px auto;
+    display: block;
+  }
+  .svg-diagram text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    text-rendering: geometricPrecision;
+  }
+  .svg-diagram .svg-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+  }
+  .svg-diagram .svg-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  .svg-caption {
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #6b6b6b;
+    margin: -16px 0 32px;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .container { padding: 40px 20px 80px; }
+    .hero h1 { font-size: 36px; }
+    section h2 { font-size: 24px; }
+    .pipeline { flex-direction: column; }
+    .pipeline-arrow { transform: rotate(90deg); justify-content: center; padding: 4px 0; }
+    .matrix { grid-template-columns: 1fr; }
+    .matrix-cell { border-right: none; }
+    .svg-diagram { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-eyebrow">Methodology / AI Testing Pipeline</div>
+    <h1>AI 驱动的<em>测试全流程</em>方法论</h1>
+    <p class="hero-sub">
+      不是让 AI 替你测，而是让 AI 把测试从「凭经验拍脑袋」变成<br>
+      <strong>需求驱动、代码交叉验证、证据闭环</strong>的工程化流水线。
+    </p>
+    <div class="hero-meta">
+      <span>11 Phases</span>
+      <span>6 Skills</span>
+      <span>10 Quality Gates</span>
+    </div>
+  </div>
+
+  <!-- ===== WHY ===== -->
+  <section>
+    <div class="section-label">Prologue / Why This Methodology</div>
+    <h2>为什么需要这套方法论</h2>
+
+    <p>团队拿到 Skill 后反馈两个极端：</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>痛点</th><th>根因</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-red">覆盖不足</span></td>
+            <td>需求文档不够细致，AI 只覆盖了显式需求，隐含分支和边界条件全漏</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gold">用例冗余</span></td>
+            <td>AI 不加判断地穷举组合，生成的用例人肉排查比手写还累</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>这两个问题的本质是同一个：<strong>缺少从需求到代码到测试的闭环验证</strong>。</p>
+
+    <blockquote>
+      <p>测试用例不是一次性产物，它在<strong>需求评审时初生</strong>，在<strong>代码交叉验证时修正</strong>，在<strong>自动化执行时闭环</strong>。每一步都有质量门禁，每一步都有证据。</p>
+    </blockquote>
+  </section>
+
+  <!-- ===== PIPELINE OVERVIEW ===== -->
+  <section>
+    <div class="section-label">Overview / Full Pipeline</div>
+    <h2>方法论总览</h2>
+
+    <h3>流水线全景</h3>
+
+    <div class="pipeline">
+      <div class="pipeline-phase p-review">
+        <div class="phase-num">Phase 0</div>
+        <div class="phase-name">需求评审</div>
+        <div class="phase-skill">requirement-review</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-generate">
+        <div class="phase-num">Phase 1</div>
+        <div class="phase-name">用例 V1</div>
+        <div class="phase-skill">test-case-generator</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-review-code">
+        <div class="phase-num">Phase 3</div>
+        <div class="phase-name">Code Review</div>
+        <div class="phase-skill">code-review</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-cross">
+        <div class="phase-num">Phase 4</div>
+        <div class="phase-name">交叉验证</div>
+        <div class="phase-skill">manual + generator</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-exec">
+        <div class="phase-num">Phase 6</div>
+        <div class="phase-name">自动化测试</div>
+        <div class="phase-skill">api-test-auto-runner</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-report">
+        <div class="phase-num">Phase 10</div>
+        <div class="phase-name">测试报告</div>
+        <div class="phase-skill">test-report-generator</div>
+      </div>
+    </div>
+
+    <h3>阶段速查表</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th><th>名称</th><th>Skill</th><th>核心产出</th><th>门禁</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>需求评审</td><td><code>requirement-review</code></td><td>澄清需求 + 风险清单</td><td>无 P0 歧义</td></tr>
+          <tr><td>1</td><td>用例 V1</td><td><code>test-case-generator</code></td><td>功能+接口用例集</td><td>10 维度覆盖</td></tr>
+          <tr><td>3</td><td>Code Review</td><td><code>code-review</code></td><td>代码问题 + 风险标注</td><td>Go / No-Go</td></tr>
+          <tr><td>4</td><td>交叉验证</td><td><code>three-musketeers</code> + generator</td><td>用例 V2（增删改）</td><td>V2 覆盖 > V1</td></tr>
+          <tr><td>6</td><td>自动化测试</td><td><code>api-test-auto-runner</code></td><td>Python 脚本 + 结果</td><td>脚本自检</td></tr>
+          <tr><td>7</td><td>结果分析</td><td><code>three-musketeers</code></td><td>根因分析 + Bug 分类</td><td>分类完成</td></tr>
+          <tr><td>10</td><td>测试报告</td><td><code>test-report-generator</code></td><td>IEEE 829 报告</td><td>Go / No-Go</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <svg class="svg-diagram" viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#6b6b6b"/>
+        </marker>
+        <marker id="arr-light" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#d4d0c8"/>
+        </marker>
+      </defs>
+
+      <!-- Dashed lines from center to nodes -->
+      <g stroke="#d4d0c8" stroke-width="1" stroke-dasharray="4 3" fill="none">
+        <line x1="450" y1="290" x2="450" y2="135"/>
+        <line x1="520" y1="300" x2="575" y2="190"/>
+        <line x1="530" y1="340" x2="620" y2="340"/>
+        <line x1="520" y1="380" x2="575" y2="490"/>
+        <line x1="450" y1="390" x2="450" y2="545"/>
+        <line x1="380" y1="380" x2="325" y2="490"/>
+        <line x1="370" y1="340" x2="280" y2="340"/>
+        <line x1="380" y1="300" x2="325" y2="190"/>
+      </g>
+
+      <!-- Clockwise flow arrows -->
+      <g stroke="#6b6b6b" stroke-width="2" fill="none" marker-end="url(#arr)">
+        <path d="M 500,120 Q 540,130 560,148" />
+        <path d="M 665,205 Q 685,250 688,295" />
+        <path d="M 682,388 Q 672,440 658,470" />
+        <path d="M 555,553 Q 530,560 505,555" />
+        <path d="M 375,555 Q 340,548 320,515" />
+        <path d="M 210,470 Q 195,430 200,385" />
+        <path d="M 225,295 Q 230,245 250,205" />
+        <path d="M 345,150 Q 380,135 400,122" />
+      </g>
+
+      <!-- Phase 0: 需求评审 (red, top) -->
+      <g>
+        <rect x="375" y="55" width="150" height="80" rx="6" fill="#c2553d"/>
+        <text x="450" y="73" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 0</text>
+        <text x="450" y="92" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">需求评审</text>
+        <text x="450" y="110" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">requirement-review</text>
+        <text x="450" y="124" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">three-musketeers</text>
+      </g>
+
+      <!-- Phase 1: 用例V1 (green, top-right) -->
+      <g>
+        <rect x="548" y="127" width="150" height="80" rx="6" fill="#4a7c59"/>
+        <text x="623" y="145" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 1</text>
+        <text x="623" y="164" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">测试用例 V1</text>
+        <text x="623" y="182" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">test-case-generator</text>
+        <text x="623" y="196" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">10 维度覆盖</text>
+      </g>
+
+      <!-- Phase 3: Code Review (gold, right) -->
+      <g>
+        <rect x="620" y="300" width="150" height="80" rx="6" fill="#b8860b"/>
+        <text x="695" y="318" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 3</text>
+        <text x="695" y="337" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">Code Review</text>
+        <text x="695" y="355" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">code-review</text>
+        <text x="695" y="369" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">理解代码做了什么</text>
+      </g>
+
+      <!-- Phase 4: 交叉验证 (red, bottom-right) -->
+      <g>
+        <rect x="548" y="473" width="150" height="80" rx="6" fill="#c2553d"/>
+        <text x="623" y="491" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 4 ★</text>
+        <text x="623" y="510" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">交叉验证</text>
+        <text x="623" y="528" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">three-musketeers</text>
+        <text x="623" y="542" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">需求 × 代码矩阵</text>
+      </g>
+
+      <!-- Phase 5-6: 测试执行 (green, bottom) -->
+      <g>
+        <rect x="375" y="545" width="150" height="80" rx="6" fill="#4a7c59"/>
+        <text x="450" y="563" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 5-6</text>
+        <text x="450" y="582" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">功能 + 自动化</text>
+        <text x="450" y="600" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">api-test-auto-runner</text>
+        <text x="450" y="614" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">脚本生成 · 执行</text>
+      </g>
+
+      <!-- Phase 7: 结果分析 (gold, bottom-left) -->
+      <g>
+        <rect x="202" y="473" width="150" height="80" rx="6" fill="#b8860b"/>
+        <text x="277" y="491" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 7</text>
+        <text x="277" y="510" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">结果分析</text>
+        <text x="277" y="528" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">three-musketeers</text>
+        <text x="277" y="542" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">脚本Bug vs 产品Bug</text>
+      </g>
+
+      <!-- Phase 8-9: 缺陷反馈 (red, left) -->
+      <g>
+        <rect x="130" y="300" width="150" height="80" rx="6" fill="#c2553d"/>
+        <text x="205" y="318" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 8-9</text>
+        <text x="205" y="337" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">缺陷 + 回归</text>
+        <text x="205" y="355" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">反馈文档(代码+数据)</text>
+        <text x="205" y="369" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">基线对比</text>
+      </g>
+
+      <!-- Phase 10: 测试报告 (green, top-left) -->
+      <g>
+        <rect x="202" y="127" width="150" height="80" rx="6" fill="#4a7c59"/>
+        <text x="277" y="145" text-anchor="middle" fill="#f5f2ec" font-size="9" class="svg-label" opacity="0.8">PHASE 10</text>
+        <text x="277" y="164" text-anchor="middle" fill="#f5f2ec" font-size="13" font-weight="700">测试报告</text>
+        <text x="277" y="182" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">test-report-generator</text>
+        <text x="277" y="196" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.8">Go / No-Go</text>
+      </g>
+
+      <!-- Center: Knowledge Base -->
+      <g>
+        <rect x="370" y="290" width="160" height="100" rx="6" fill="#1c1c28"/>
+        <text x="450" y="315" text-anchor="middle" fill="#f5f2ec" font-size="11" class="svg-label" opacity="0.6">MEMORY</text>
+        <text x="450" y="335" text-anchor="middle" fill="#f5f2ec" font-size="15" font-weight="700" class="svg-title">📚 知识库</text>
+        <text x="450" y="355" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.7">Obsidian · Git</text>
+        <text x="450" y="369" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.7">用例 · 脚本 · 历史</text>
+        <text x="450" y="383" text-anchor="middle" fill="#f5f2ec" font-size="9" opacity="0.7">需求 · 接口文档</text>
+      </g>
+
+      <!-- Legend -->
+      <g transform="translate(770, 55)">
+        <text x="0" y="0" font-size="9" class="svg-label" fill="#8a8580">SKILL 分类</text>
+        <rect x="0" y="10" width="14" height="14" rx="3" fill="#c2553d"/>
+        <text x="20" y="22" font-size="10" fill="#1c1c28">需求 / 分析</text>
+        <rect x="0" y="30" width="14" height="14" rx="3" fill="#4a7c59"/>
+        <text x="20" y="42" font-size="10" fill="#1c1c28">生成 / 执行</text>
+        <rect x="0" y="50" width="14" height="14" rx="3" fill="#b8860b"/>
+        <text x="20" y="62" font-size="10" fill="#1c1c28">审查 / 诊断</text>
+      </g>
+
+      <!-- Loop annotation -->
+      <text x="450" y="665" text-anchor="middle" font-size="11" fill="#8a8580" font-style="italic" class="svg-title">
+        ↻ 测试不是线性流程，而是闭环 — 每轮经验沉淀进知识库，下一轮更精准
+      </text>
+    </svg>
+    <p class="svg-caption">图 1：AI 驱动的测试全流程闭环 — 知识库在中心，为每个 Phase 供能</p>
+  </section>
+  <section>
+    <div class="section-label">00 / Knowledge Base</div>
+    <h2>构建知识库 — <em>AI 的记忆体系基础</em></h2>
+
+    <blockquote>
+      <p>没有 Memory，AI 每次都从零开始。有了知识库，AI 才懂你的项目、你的业务、你的历史踩坑。<strong>事实像档案进仓库，例子像故事变测试数据，规矩像手册变 Skill 文件。</strong></p>
+    </blockquote>
+
+    <h3>三层架构</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>层级</th><th>内容</th><th>存储</th><th>作用</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-red">长期记忆</span></td><td>方法论、测试策略、经验笔记</td><td>Obsidian / Git</td><td>跨项目知识沉淀</td></tr>
+          <tr><td><span class="badge badge-green">项目记忆</span></td><td>PRD、接口文档、源代码、Git 历史</td><td>项目仓库</td><td>当前项目上下文</td></tr>
+          <tr><td><span class="badge badge-gold">测试资产</span></td><td>历史用例、脚本、Bug 记录</td><td><code>test_cases/</code></td><td>基线参考、模式匹配</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>知识库如何赋能每个 Phase</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>没有知识库</th><th>有知识库</th></tr></thead>
+        <tbody>
+          <tr><td>0 需求评审</td><td>每个歧义都要问 PM</td><td>知识库自动回答 40-70% 的问题</td></tr>
+          <tr><td>1 用例生成</td><td>从零生成，覆盖取决于 PRD</td><td>历史用例作为基线，只增量补充</td></tr>
+          <tr><td>4 交叉验证</td><td>人肉逐行比对</td><td>AI 自动比对，产出三方映射表</td></tr>
+          <tr><td>7 结果分析</td><td>从头分析失败原因</td><td>历史 Bug 模式匹配，快速定位</td></tr>
+          <tr><td>10 测试报告</td><td>只有当前数据</td><td>可与历史趋势对比</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gate">
+      <div class="gate-icon">🔴</div>
+      <div class="gate-content">
+        <strong>GATE-PRE</strong>：知识库是所有 Phase 的前置依赖。没有知识库的 AI 测试 = 每次都从零开始的实习生。
+      </div>
+    </div>
+
+    <svg class="svg-diagram" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L7,3.5 L0,7 Z" fill="#8a8580"/>
+        </marker>
+        <marker id="arr2-light" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#d4d0c8"/>
+        </marker>
+      </defs>
+
+      <!-- Column labels -->
+      <text x="130" y="45" text-anchor="middle" font-size="10" class="svg-label" fill="#8a8580">知识来源</text>
+      <text x="450" y="45" text-anchor="middle" font-size="10" class="svg-label" fill="#8a8580">AI 记忆引擎</text>
+      <text x="770" y="45" text-anchor="middle" font-size="10" class="svg-label" fill="#8a8580">测试流水线</text>
+
+      <!-- Left: Knowledge Sources -->
+      <g>
+        <rect x="30" y="60" width="200" height="52" rx="5" fill="rgba(194,85,61,0.08)" stroke="#c2553d" stroke-width="1"/>
+        <text x="45" y="80" font-size="12" font-weight="600" fill="#1c1c28">📝 Obsidian Vault</text>
+        <text x="45" y="98" font-size="9" fill="#6b6b6b">方法论 · 测试策略 · 经验笔记</text>
+      </g>
+      <g>
+        <rect x="30" y="122" width="200" height="52" rx="5" fill="rgba(74,124,89,0.08)" stroke="#4a7c59" stroke-width="1"/>
+        <text x="45" y="142" font-size="12" font-weight="600" fill="#1c1c28">📋 项目文档</text>
+        <text x="45" y="160" font-size="9" fill="#6b6b6b">PRD · 设计文档 · 接口文档</text>
+      </g>
+      <g>
+        <rect x="30" y="184" width="200" height="52" rx="5" fill="rgba(184,134,11,0.08)" stroke="#b8860b" stroke-width="1"/>
+        <text x="45" y="204" font-size="12" font-weight="600" fill="#1c1c28">🔧 Git 仓库</text>
+        <text x="45" y="222" font-size="9" fill="#6b6b6b">源代码 · 提交历史 · 变更记录</text>
+      </g>
+      <g>
+        <rect x="30" y="246" width="200" height="52" rx="5" fill="rgba(194,85,61,0.08)" stroke="#c2553d" stroke-width="1"/>
+        <text x="45" y="266" font-size="12" font-weight="600" fill="#1c1c28">🧪 测试资产</text>
+        <text x="45" y="284" font-size="9" fill="#6b6b6b">历史用例 · 脚本 · Bug 记录</text>
+      </g>
+      <g>
+        <rect x="30" y="308" width="200" height="52" rx="5" fill="rgba(74,124,89,0.08)" stroke="#4a7c59" stroke-width="1"/>
+        <text x="45" y="328" font-size="12" font-weight="600" fill="#1c1c28">📊 历史需求</text>
+        <text x="45" y="346" font-size="9" fill="#6b6b6b">验收标准 · 业务规则</text>
+      </g>
+      <g>
+        <rect x="30" y="370" width="200" height="52" rx="5" fill="rgba(184,134,11,0.08)" stroke="#b8860b" stroke-width="1" stroke-dasharray="4 2"/>
+        <text x="45" y="390" font-size="12" font-weight="600" fill="#1c1c28">🌐 外部知识</text>
+        <text x="45" y="408" font-size="9" fill="#6b6b6b">Context7 · GitHub 开源实现</text>
+      </g>
+
+      <!-- Arrows: sources to engine -->
+      <g stroke-width="1.5" fill="none" marker-end="url(#arr2)">
+        <line x1="230" y1="86" x2="345" y2="210" stroke="#c2553d"/>
+        <line x1="230" y1="148" x2="345" y2="240" stroke="#4a7c59"/>
+        <line x1="230" y1="210" x2="345" y2="270" stroke="#b8860b"/>
+        <line x1="230" y1="272" x2="345" y2="300" stroke="#c2553d"/>
+        <line x1="230" y1="334" x2="345" y2="330" stroke="#4a7c59"/>
+        <line x1="230" y1="396" x2="370" y2="360" stroke="#b8860b" stroke-dasharray="4 2"/>
+      </g>
+
+      <!-- Center: AI Engine -->
+      <g>
+        <rect x="350" y="190" width="200" height="180" rx="8" fill="#1c1c28"/>
+        <text x="450" y="218" text-anchor="middle" font-size="10" class="svg-label" fill="#f5f2ec" opacity="0.5">MEMORY ENGINE</text>
+        <text x="450" y="245" text-anchor="middle" font-size="18" font-weight="700" fill="#f5f2ec" class="svg-title">🧠 AI Agent</text>
+        <line x1="380" y1="258" x2="520" y2="258" stroke="#3a3a48" stroke-width="1"/>
+        <text x="450" y="278" text-anchor="middle" font-size="10" fill="#f5f2ec" opacity="0.8">知识检索 · 交叉引用</text>
+        <text x="450" y="294" text-anchor="middle" font-size="10" fill="#f5f2ec" opacity="0.8">模式识别 · 经验复用</text>
+        <line x1="380" y1="305" x2="520" y2="305" stroke="#3a3a48" stroke-width="1"/>
+        <text x="450" y="322" text-anchor="middle" font-size="9" fill="#f5f2ec" opacity="0.6">长期: Obsidian + Git</text>
+        <text x="450" y="336" text-anchor="middle" font-size="9" fill="#f5f2ec" opacity="0.6">项目: 仓库文件</text>
+        <text x="450" y="350" text-anchor="middle" font-size="9" fill="#f5f2ec" opacity="0.6">外部: Context7 / GitHub</text>
+      </g>
+
+      <!-- Arrows: engine to pipeline -->
+      <g stroke="#d4d0c8" stroke-width="1.5" fill="none" marker-end="url(#arr2-light)">
+        <line x1="555" y1="210" x2="665" y2="86"/>
+        <line x1="555" y1="240" x2="665" y2="148"/>
+        <line x1="555" y1="280" x2="665" y2="230"/>
+        <line x1="555" y1="310" x2="665" y2="334"/>
+        <line x1="555" y1="340" x2="665" y2="410"/>
+      </g>
+
+      <!-- Right: Pipeline Phases -->
+      <g>
+        <rect x="670" y="60" width="200" height="52" rx="5" fill="rgba(194,85,61,0.06)" stroke="#c2553d" stroke-width="1"/>
+        <text x="685" y="80" font-size="11" font-weight="600" fill="#c2553d">Phase 0 · 需求评审</text>
+        <text x="685" y="98" font-size="9" fill="#6b6b6b">知识库回答 50%+ 问题</text>
+      </g>
+      <g>
+        <rect x="670" y="122" width="200" height="52" rx="5" fill="rgba(74,124,89,0.06)" stroke="#4a7c59" stroke-width="1"/>
+        <text x="685" y="142" font-size="11" font-weight="600" fill="#4a7c59">Phase 1 · 用例生成</text>
+        <text x="685" y="160" font-size="9" fill="#6b6b6b">历史用例作为基线参考</text>
+      </g>
+      <g>
+        <rect x="670" y="184" width="200" height="52" rx="5" fill="rgba(184,134,11,0.06)" stroke="#b8860b" stroke-width="1"/>
+        <text x="685" y="204" font-size="11" font-weight="600" fill="#b8860b">Phase 4 · 交叉验证</text>
+        <text x="685" y="222" font-size="9" fill="#6b6b6b">代码 vs 需求自动比对</text>
+      </g>
+      <g>
+        <rect x="670" y="308" width="200" height="52" rx="5" fill="rgba(194,85,61,0.06)" stroke="#c2553d" stroke-width="1"/>
+        <text x="685" y="328" font-size="11" font-weight="600" fill="#c2553d">Phase 7 · 结果分析</text>
+        <text x="685" y="346" font-size="9" fill="#6b6b6b">历史 Bug 模式匹配</text>
+      </g>
+      <g>
+        <rect x="670" y="384" width="200" height="52" rx="5" fill="rgba(74,124,89,0.06)" stroke="#4a7c59" stroke-width="1"/>
+        <text x="685" y="404" font-size="11" font-weight="600" fill="#4a7c59">Phase 10 · 测试报告</text>
+        <text x="685" y="422" font-size="9" fill="#6b6b6b">历史趋势对比</text>
+      </g>
+
+      <!-- Feedback loop arrow -->
+      <g fill="none">
+        <path d="M 770,448 Q 770,500 450,500 Q 130,500 130,440" stroke="#c2553d" stroke-width="2" stroke-dasharray="8 4" marker-end="url(#arr2)"/>
+        <text x="450" y="525" text-anchor="middle" font-size="11" fill="#c2553d" font-style="italic" class="svg-title">↻ 经验沉淀 — 每轮产出的新用例、Bug 模式、边界场景写回知识库</text>
+      </g>
+    </svg>
+    <p class="svg-caption">图 2：知识库记忆体系 — 左侧来源 → 中心引擎 → 右侧流水线，底部经验沉淀回路</p>
+  </section>
+  <section>
+    <div class="section-label">01 / Phase 0</div>
+    <h2>需求评审 — <em>把模糊变成可测</em></h2>
+
+    <blockquote>
+      <p>模糊的需求流进代码，模糊的需求就会流进测试用例。<strong>上游不澄清，下游全返工。</strong></p>
+    </blockquote>
+
+    <h3>两种评审方式</h3>
+
+    <div class="card">
+      <div class="card-title">方式一：轻量评审 <span class="tag">需求 ≤ 3 页</span></div>
+      <p>直接使用 <code>requirement-review</code> skill。它会先扫描已有代码库和文档，自动回答 40-70% 的问题（Phase 0 知识库交叉验证），再做三视角分析 + 红蓝对抗，最后输出三级分类结论。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">方式二：深度评审 <span class="tag">复杂需求 / 新业务</span></div>
+      <p>先用 <code>three-musketeers</code> 做全方位深度分析（产品/架构/QA 三视角 + 红蓝对抗），再用 <code>requirement-review</code> 做知识库交叉验证补全。</p>
+    </div>
+
+    <h3>关键产出</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>产出物</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td>需求澄清清单</td><td>Phase 1 用例生成的输入</td></tr>
+          <tr><td>风险标注表（🔴🟡🟢）</td><td>决定测试投入分配</td></tr>
+          <tr><td>隐含需求清单</td><td>Phase 4 交叉验证的基准</td></tr>
+          <tr><td>QA 验收清单</td><td>最终测试报告的判定依据</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gate">
+      <div class="gate-icon">🔴</div>
+      <div class="gate-content">
+        <strong>GATE-0</strong>：所有 P0 级歧义必须有明确结论（PM 确认或知识库佐证），不能带「待定」进入 Phase 1。
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHASE 1 ===== -->
+  <section>
+    <div class="section-label">02 / Phase 1</div>
+    <h2>测试用例生成 V1 — <em>从需求到覆盖</em></h2>
+
+    <p>使用 <code>test-case-generator</code> skill，输入<strong>澄清后的需求</strong>（不是原始 PRD）。Skill 内置 10 个测试维度，每个维度强制最少 5 条用例。</p>
+
+    <h3>10 维度覆盖矩阵</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>维度</th><th>关注什么</th><th>典型场景</th></tr></thead>
+        <tbody>
+          <tr><td>功能正确性</td><td>主流程走通</td><td>正常下单、正常支付</td></tr>
+          <tr><td>输入验证</td><td>参数校验完备</td><td>空值、超长、特殊字符</td></tr>
+          <tr><td>边界值</td><td>临界点行为</td><td>0、1、最大值、最大值+1</td></tr>
+          <tr><td>业务规则</td><td>复杂条件组合</td><td>优惠券叠加规则</td></tr>
+          <tr><td>状态转换</td><td>状态机覆盖</td><td>订单状态流转</td></tr>
+          <tr><td>异常处理</td><td>错误场景恢复</td><td>网络超时、支付失败重试</td></tr>
+          <tr><td>并发/幂等</td><td>重复请求行为</td><td>重复提交、并发扣减</td></tr>
+          <tr><td>容错性</td><td>部分依赖失效</td><td>缓存宕机、第三方不可用</td></tr>
+          <tr><td>安全性</td><td>越权和注入</td><td>水平越权、SQL 注入</td></tr>
+          <tr><td>性能</td><td>响应时间基准</td><td>单接口 P99 &lt; 200ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>用例数量校准</h3>
+
+    <div class="pipeline" style="gap: 12px;">
+      <div class="pipeline-phase p-review" style="border-radius: 4px;">
+        <div class="phase-num">简单</div>
+        <div class="phase-name">80-120 条</div>
+        <div class="phase-skill">单一功能</div>
+      </div>
+      <div class="pipeline-phase p-generate" style="border-radius: 4px;">
+        <div class="phase-num">中等</div>
+        <div class="phase-name">150-250 条</div>
+        <div class="phase-skill">多功能联动</div>
+      </div>
+      <div class="pipeline-phase p-cross" style="border-radius: 4px;">
+        <div class="phase-num">复杂</div>
+        <div class="phase-name">250-400+</div>
+        <div class="phase-skill">多系统交互</div>
+      </div>
+    </div>
+
+    <blockquote>
+      <p>⚠️ <strong>如果你的用例数远低于下限</strong>：不是需求简单，是你漏了维度。回到 Phase 0 补需求。</p>
+    </blockquote>
+
+    <div class="gate">
+      <div class="gate-icon">🔴</div>
+      <div class="gate-content">
+        <strong>GATE-1</strong>：<code>test-case-generator</code> 内置 6 项自检全部 PASS：维度覆盖 / 用例数量 / 优先级分布 / 数据完备性 / 重复检查 / 覆盖完整性。
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHASE 3 ===== -->
+  <section>
+    <div class="section-label">03 / Phase 3</div>
+    <h2>Code Review — <em>不只是找 Bug，是理解代码做了什么</em></h2>
+
+    <p>使用 <code>code-review</code> skill 对提测代码进行审查。</p>
+
+    <blockquote>
+      <p>Code Review 在测试流程中的价值，不只是找代码 Bug —— 它的真正价值是<strong>理解代码实际实现了什么</strong>，为下一步的交叉验证提供事实基础。</p>
+    </blockquote>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>维度</th><th>传统认知</th><th>方法论认知</th></tr></thead>
+        <tbody>
+          <tr><td>目的</td><td>找代码缺陷</td><td><strong>理解代码实际实现了什么</strong></td></tr>
+          <tr><td>产出</td><td>Bug 列表</td><td>风险地图 + 实现偏差清单</td></tr>
+          <tr><td>下游</td><td>开发修复</td><td><strong>反哺测试用例（Phase 4）</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>五步审查流程</h3>
+    <ul>
+      <li><strong>上下文理解</strong>：读全部源码、PRD、配置、Git 历史</li>
+      <li><strong>三视角分析</strong>：业务正确性 / 架构与并发 / 健壮性与可测性</li>
+      <li><strong>定级</strong>：P0 阻塞 → P3 信息</li>
+      <li><strong>定级校准</strong>：对每个 P0/P1 做「魔鬼代言人」质询，防止虚高</li>
+      <li><strong>决策</strong>：✅ 可发布 / ⚠️ 修 P1 后可发布 / ❌ 阻塞</li>
+    </ul>
+
+    <div class="gate gate-yellow">
+      <div class="gate-icon">🟡</div>
+      <div class="gate-content">
+        <strong>GATE-3</strong>：Code Review 不得有未校准的 P0/P1 发现。每个高级别问题必须经过校准质询。
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHASE 4 ===== -->
+  <section>
+    <div class="section-label">04 / Phase 4 ★ Core</div>
+    <h2>需求 × 代码交叉验证 — <em>全流水线 ROI 最高的一步</em></h2>
+
+    <blockquote>
+      <p>大多数测试覆盖不足的问题，根源都在这里：<strong>只从需求生成用例，不回头看代码实际做了什么。</strong></p>
+    </blockquote>
+
+    <h3>为什么要交叉验证</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>场景</th><th>只看需求</th><th>交叉验证后</th></tr></thead>
+        <tbody>
+          <tr><td>需求说「支持分页」</td><td>只测正常分页</td><td>代码还实现了游标分页 → 补充测试</td></tr>
+          <tr><td>需求没提并发</td><td>不测并发</td><td>代码里用了分布式锁 → 补充测试</td></tr>
+          <tr><td>需求说「返回列表」</td><td>只测有数据</td><td>空列表返回 null → 发现 Bug</td></tr>
+          <tr><td>代码多了个内部接口</td><td>不知道</td><td>接口文档没写但已暴露 → 安全风险</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <svg class="svg-diagram" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L7,3.5 L0,7 Z" fill="#8a8580"/>
+        </marker>
+      </defs>
+
+      <!-- Input column -->
+      <text x="110" y="45" text-anchor="middle" font-size="10" class="svg-label" fill="#8a8580">输入</text>
+      <g>
+        <rect x="25" y="58" width="170" height="44" rx="5" fill="rgba(194,85,61,0.08)" stroke="#c2553d" stroke-width="1"/>
+        <text x="110" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#1c1c28">📋 需求文档</text>
+        <text x="110" y="93" text-anchor="middle" font-size="9" fill="#6b6b6b">(澄清后)</text>
+      </g>
+      <g>
+        <rect x="25" y="112" width="170" height="44" rx="5" fill="rgba(184,134,11,0.08)" stroke="#b8860b" stroke-width="1"/>
+        <text x="110" y="132" text-anchor="middle" font-size="11" font-weight="600" fill="#1c1c28">💻 提测代码</text>
+        <text x="110" y="147" text-anchor="middle" font-size="9" fill="#6b6b6b">(完整源码)</text>
+      </g>
+      <g>
+        <rect x="25" y="166" width="170" height="44" rx="5" fill="rgba(74,124,89,0.08)" stroke="#4a7c59" stroke-width="1"/>
+        <text x="110" y="186" text-anchor="middle" font-size="11" font-weight="600" fill="#1c1c28">🧪 测试用例 V1</text>
+        <text x="110" y="201" text-anchor="middle" font-size="9" fill="#6b6b6b">(初始版本)</text>
+      </g>
+
+      <!-- Arrows from inputs to container -->
+      <g stroke-width="1.5" fill="none" marker-end="url(#arr3)">
+        <line x1="195" y1="80" x2="245" y2="120" stroke="#c2553d"/>
+        <line x1="195" y1="134" x2="245" y2="170" stroke="#b8860b"/>
+        <line x1="195" y1="188" x2="245" y2="220" stroke="#4a7c59"/>
+      </g>
+
+      <!-- Three Musketeers Container -->
+      <rect x="245" y="55" width="410" height="300" rx="8" fill="rgba(255,255,255,0.4)" stroke="#d4d0c8" stroke-width="1.5"/>
+      <text x="450" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1c1c28" class="svg-title">⚔️ 三剑客交叉验证 (three-musketeers)</text>
+
+      <!-- Product Expert -->
+      <g>
+        <rect x="265" y="92" width="175" height="108" rx="5" fill="rgba(194,85,61,0.06)" stroke="#c2553d" stroke-width="1"/>
+        <text x="352" y="111" text-anchor="middle" font-size="11" font-weight="700" fill="#c2553d">🎯 产品视角</text>
+        <text x="275" y="129" font-size="9" fill="#1c1c28">• 需求是否完全被代码实现？</text>
+        <text x="275" y="143" font-size="9" fill="#1c1c28">• 有没有需求写了代码没做？</text>
+        <text x="275" y="157" font-size="9" fill="#1c1c28">• 业务规则分支对不对？</text>
+        <text x="275" y="175" font-size="9" fill="#1c1c28">• 数据生命周期完整？</text>
+        <text x="275" y="193" font-size="9" font-weight="600" fill="#c2553d">→ 缺失实现清单</text>
+      </g>
+
+      <!-- Architect Expert -->
+      <g>
+        <rect x="450" y="92" width="175" height="108" rx="5" fill="rgba(184,134,11,0.06)" stroke="#b8860b" stroke-width="1"/>
+        <text x="537" y="111" text-anchor="middle" font-size="11" font-weight="700" fill="#b8860b">🏗️ 架构视角</text>
+        <text x="460" y="129" font-size="9" fill="#1c1c28">• 代码有隐含并发逻辑？</text>
+        <text x="460" y="143" font-size="9" fill="#1c1c28">• 异常路径覆盖了没？</text>
+        <text x="460" y="157" font-size="9" fill="#1c1c28">• 代码做了需求没写的？</text>
+        <text x="460" y="175" font-size="9" fill="#1c1c28">• Feature Flag 影响范围？</text>
+        <text x="460" y="193" font-size="9" font-weight="600" fill="#b8860b">→ 隐含需求清单</text>
+      </g>
+
+      <!-- QA Expert -->
+      <g>
+        <rect x="265" y="208" width="175" height="108" rx="5" fill="rgba(74,124,89,0.06)" stroke="#4a7c59" stroke-width="1"/>
+        <text x="352" y="227" text-anchor="middle" font-size="11" font-weight="700" fill="#4a7c59">🛡️ QA 视角</text>
+        <text x="275" y="245" font-size="9" fill="#1c1c28">• 用例覆盖所有代码分支？</text>
+        <text x="275" y="259" font-size="9" fill="#1c1c28">• catch 块有对应用例？</text>
+        <text x="275" y="273" font-size="9" fill="#1c1c28">• 边界值与实际限制一致？</text>
+        <text x="275" y="291" font-size="9" fill="#1c1c28">• 安全性（越权/注入）遗漏？</text>
+        <text x="275" y="309" font-size="9" font-weight="600" fill="#4a7c59">→ 用例缺口清单</text>
+      </g>
+
+      <!-- Red-Blue Confrontation -->
+      <g>
+        <polygon points="537,220 615,262 537,304 459,262" fill="rgba(28,28,40,0.04)" stroke="#1c1c28" stroke-width="1"/>
+        <text x="537" y="248" text-anchor="middle" font-size="10" font-weight="700" fill="#1c1c28">🔴⚔️🔵</text>
+        <text x="537" y="263" text-anchor="middle" font-size="9" font-weight="600" fill="#1c1c28">红蓝对抗</text>
+        <text x="537" y="277" text-anchor="middle" font-size="8" fill="#6b6b6b">QA→PM</text>
+        <text x="537" y="289" text-anchor="middle" font-size="8" fill="#6b6b6b">QA→Arch</text>
+        <text x="537" y="301" text-anchor="middle" font-size="8" fill="#6b6b6b">Arch→PM</text>
+      </g>
+
+      <!-- Arrow to matrix -->
+      <g fill="none" marker-end="url(#arr3)">
+        <line x1="655" y1="205" x2="695" y2="205" stroke="#d4d0c8" stroke-width="1.5"/>
+      </g>
+
+      <!-- Matrix (right) -->
+      <text x="780" y="72" text-anchor="middle" font-size="10" class="svg-label" fill="#8a8580">交叉验证矩阵</text>
+      <g>
+        <rect x="700" y="82" width="80" height="28" fill="rgba(28,28,40,0.04)" stroke="#d4d0c8"/>
+        <rect x="780" y="82" width="80" height="28" fill="rgba(28,28,40,0.04)" stroke="#d4d0c8"/>
+        <text x="740" y="100" text-anchor="middle" font-size="9" fill="#6b6b6b">代码✓</text>
+        <text x="820" y="100" text-anchor="middle" font-size="9" fill="#6b6b6b">代码✗</text>
+
+        <rect x="700" y="110" width="80" height="28" fill="rgba(28,28,40,0.04)" stroke="#d4d0c8"/>
+        <text x="740" y="128" text-anchor="middle" font-size="9" fill="#6b6b6b">需求✓</text>
+        <rect x="780" y="110" width="80" height="28" fill="rgba(74,124,89,0.1)" stroke="#d4d0c8"/>
+        <text x="820" y="128" text-anchor="middle" font-size="8" fill="#4a7c59">需求✓×代码✓</text>
+
+        <rect x="700" y="138" width="80" height="28" fill="rgba(28,28,40,0.04)" stroke="#d4d0c8"/>
+        <text x="740" y="156" text-anchor="middle" font-size="9" fill="#6b6b6b">需求✗</text>
+        <rect x="780" y="138" width="80" height="28" fill="rgba(184,134,11,0.1)" stroke="#d4d0c8"/>
+        <text x="820" y="156" text-anchor="middle" font-size="8" fill="#b8860b">隐含需求</text>
+
+        <rect x="700" y="166" width="80" height="28" fill="rgba(74,124,89,0.08)" stroke="#d4d0c8"/>
+        <text x="740" y="184" text-anchor="middle" font-size="8" fill="#4a7c59">✅ 正常覆盖</text>
+        <rect x="780" y="166" width="80" height="28" fill="rgba(194,85,61,0.1)" stroke="#d4d0c8"/>
+        <text x="820" y="184" text-anchor="middle" font-size="8" fill="#c2553d">缺失实现</text>
+
+        <rect x="700" y="194" width="80" height="28" fill="rgba(184,134,11,0.08)" stroke="#d4d0c8"/>
+        <text x="740" y="212" text-anchor="middle" font-size="8" fill="#b8860b">⚠️ 补用例</text>
+        <rect x="780" y="194" width="80" height="28" fill="rgba(28,28,40,0.04)" stroke="#d4d0c8"/>
+        <text x="820" y="212" text-anchor="middle" font-size="8" fill="#6b6b6b">🔘 忽略</text>
+
+        <text x="780" y="240" text-anchor="middle" font-size="9" fill="#6b6b6b">→ 保持</text>
+        <text x="780" y="255" text-anchor="middle" font-size="9" fill="#c2553d">→ 报Bug</text>
+        <text x="780" y="270" text-anchor="middle" font-size="9" fill="#b8860b">→ 补用例</text>
+      </g>
+
+      <!-- Arrow container to output -->
+      <g fill="none" marker-end="url(#arr3)">
+        <line x1="450" y1="360" x2="450" y2="400" stroke="#4a7c59" stroke-width="2"/>
+      </g>
+
+      <!-- Output: Test Case V2 -->
+      <g>
+        <rect x="245" y="405" width="410" height="75" rx="6" fill="#4a7c59"/>
+        <text x="450" y="428" text-anchor="middle" font-size="9" class="svg-label" fill="#f5f2ec" opacity="0.7">OUTPUT</text>
+        <text x="450" y="448" text-anchor="middle" font-size="14" font-weight="700" fill="#f5f2ec">🧪 测试用例 V2</text>
+        <text x="450" y="468" text-anchor="middle" font-size="10" fill="#f5f2ec" opacity="0.85">增: 隐含需求 (+10-30%) · 删: 冗余 (-5-10%) · 改: 偏差修正 · 调: 风险优先级</text>
+      </g>
+
+      <!-- GATE -->
+      <g>
+        <rect x="200" y="500" width="500" height="32" rx="5" fill="rgba(74,124,89,0.08)" stroke="#4a7c59" stroke-width="1"/>
+        <text x="450" y="520" text-anchor="middle" font-size="11" fill="#1c1c28">🟢 <tspan font-weight="600">GATE-4</tspan>: 「需求-代码-用例」三方映射表完成，每条用例可追溯到需求条目或代码分支</text>
+      </g>
+
+      <!-- Insight box -->
+      <text x="450" y="560" text-anchor="middle" font-size="10" fill="#6b6b6b" font-style="italic" class="svg-title">
+        💡 为什么交给 AI？三视角正交扫描不重不漏，红蓝对抗强制发现 ≥ 5 个真实风险，AI 做 90% 粗筛，人做 10% 判断
+      </text>
+    </svg>
+    <p class="svg-caption">图 3：AI 交叉验证三剑客流程 — 三视角扫描 + 红蓝对抗 → 交叉验证矩阵 → 用例 V2</p>
+
+    <h3>人工 vs AI — <em>为什么交给 AI？</em></h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>维度</th><th>纯人工</th><th>AI 三剑客</th></tr></thead>
+        <tbody>
+          <tr><td>效率</td><td>逐行比对 1-2 天</td><td>自动扫描 30 分钟</td></tr>
+          <tr><td>覆盖</td><td>容易疲劳遗漏</td><td>三视角正交，不重不漏</td></tr>
+          <tr><td>可重复</td><td>每次结果不同</td><td>可固化、可审计</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== PHASE 6-7 ===== -->
+  <section>
+    <div class="section-label">05 / Phase 6-7</div>
+    <h2>自动化测试 & 结果分析</h2>
+
+    <h3>接口自动化 <span class="tag">Phase 6</span></h3>
+
+    <p>使用 <code>api-test-auto-runner</code> skill，输入 PRD + 接口地址。Skill 自动完成六步流程：</p>
+
+    <div class="pipeline" style="gap: 4px;">
+      <div class="pipeline-phase p-review" style="border-radius: 4px;">
+        <div class="phase-num">Step 1</div>
+        <div class="phase-name">上下文收集</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-generate" style="border-radius: 4px;">
+        <div class="phase-num">Step 2</div>
+        <div class="phase-name">脚本生成</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-review-code" style="border-radius: 4px;">
+        <div class="phase-num">Step 3</div>
+        <div class="phase-name">自动执行</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-cross" style="border-radius: 4px;">
+        <div class="phase-num">Step 4</div>
+        <div class="phase-name">结果分析</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-report" style="border-radius: 4px;">
+        <div class="phase-num">Step 5</div>
+        <div class="phase-name">报告输出</div>
+      </div>
+    </div>
+
+    <div class="gate gate-yellow">
+      <div class="gate-icon">🟡</div>
+      <div class="gate-content">
+        <strong>GATE-6</strong>：脚本必须能成功执行（无语法错误、无环境依赖问题），才能开始正式分析结果。
+      </div>
+    </div>
+
+    <h3>失败分类决策树 <span class="tag">Phase 7</span></h3>
+
+    <div class="card">
+      <div class="tree"><span class="branch">测试失败</span>
+  │
+  ├─ 批量失败 ──→ <span class="no">环境问题</span> → 修复环境后重跑
+  │
+  └─ 单个失败
+      │
+      ├─ 断言有误 ──────────→ <span class="yes">脚本Bug</span> → 修脚本重跑
+      │
+      ├─ 参数有误 ──────────→ <span class="yes">脚本Bug</span> → 修脚本重跑
+      │
+      ├─ 文档与实际不一致 ──→ <span class="no">API变更</span> → 更新基准重跑
+      │
+      └─ 文档与实际一致 ────→ <span class="bug">✅ 确认产品Bug</span> → 进入 Phase 8</div>
+    </div>
+
+    <blockquote>
+      <p>每个失败先过决策树：<strong>脚本 Bug → 修脚本；API 变更 → 更新基准；确认产品 Bug → 才报。</strong> 这是建立开发信任的关键。</p>
+    </blockquote>
+  </section>
+
+  <!-- ===== PHASE 8-9 ===== -->
+  <section>
+    <div class="section-label">06 / Phase 8-9</div>
+    <h2>缺陷反馈 & 回归测试</h2>
+
+    <h3>缺陷反馈文档 <span class="tag">Phase 8</span></h3>
+
+    <blockquote>
+      <p>开发最烦的反馈：「这个接口有问题」。<br>开发最喜欢的反馈：「这个接口在 X 参数下返回 Y，但应该是 Z，这是代码位置和复现步骤」。</p>
+    </blockquote>
+
+    <div class="card">
+      <div class="card-title">反馈文档四要素</div>
+      <ul>
+        <li><strong>完整请求参数 + 实际响应 + 预期响应</strong> — 开发不需要猜</li>
+        <li><strong>代码位置定位</strong> — 文件、方法、行号</li>
+        <li><strong>测试数据</strong> — 开发能立刻复现的账号和数据</li>
+        <li><strong>Code Review 关联</strong> — 如果 CR 已标注，引用编号</li>
+      </ul>
+    </div>
+
+    <h3>回归测试 <span class="tag">Phase 9</span></h3>
+
+    <p>回归测试采用<strong>基线对比策略</strong>（借鉴 Harness Engineering 核心方法论）：</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>对比结果</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><td>Pass → Fail</td><td><span class="badge badge-red">回归</span> 修复引入了新问题</td></tr>
+          <tr><td>Fail → Pass</td><td><span class="badge badge-green">修复成功</span></td></tr>
+          <tr><td>Fail → Fail</td><td><span class="badge badge-gold">修复无效</span></td></tr>
+          <tr><td>Pass → Pass</td><td><span class="badge badge-gray">未受影响</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gate">
+      <div class="gate-icon">🔴</div>
+      <div class="gate-content">
+        <strong>GATE-9</strong>：回归测试不得引入新的 P0/P1 失败。如有，打回修复。
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHASE 10 ===== -->
+  <section>
+    <div class="section-label">07 / Phase 10</div>
+    <h2>测试报告生成</h2>
+
+    <p>使用 <code>test-report-generator</code> skill，遵循 <strong>Minto 金字塔原理</strong>：结论先行，细节后补。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>章节</th><th>内容</th><th>给谁看</th></tr></thead>
+        <tbody>
+          <tr><td>头部决策表</td><td>Go / No-Go + 核心数字</td><td>所有人（3 秒看完）</td></tr>
+          <tr><td>执行摘要</td><td>一段话总结结论</td><td>管理层</td></tr>
+          <tr><td>测试策略</td><td>方法、范围、优先级</td><td>测试负责人</td></tr>
+          <tr><td>执行结果</td><td>用例统计、通过率、趋势</td><td>测试 + 开发</td></tr>
+          <tr><td>缺陷分析</td><td>分类统计、严重分布、遗留</td><td>开发 + PM</td></tr>
+          <tr><td>风险评估</td><td>遗留风险、建议</td><td>决策者</td></tr>
+          <tr><td>结论与建议</td><td>明确的 Go / No-Go + 条件</td><td>决策者</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>报告四原则</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>原则</th><th>✅ 正确</th><th>❌ 错误</th></tr></thead>
+        <tbody>
+          <tr><td>数据优于形容词</td><td>通过率 96.2%</td><td>大部分通过</td></tr>
+          <tr><td>趋势优于快照</td><td>较上轮减少 3 个 P1</td><td>还有 2 个 P1</td></tr>
+          <tr><td>决策优于记录</td><td>建议有条件发布</td><td>测试已完成</td></tr>
+          <tr><td>分层呈现</td><td>高管看结论、开发看详情</td><td>一份报告所有人看一样的</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== TRAPS ===== -->
+  <section>
+    <div class="section-label">08 / Anti-Patterns</div>
+    <h2>常见陷阱与反模式</h2>
+
+    <div class="card">
+      <div class="card-title"><span class="badge badge-red">陷阱 1</span> 跳过需求评审，直接生成用例</div>
+      <p><strong>症状</strong>：用例覆盖主流程，边界和异常全漏。<br>
+      <strong>对策</strong>：Phase 0 是硬门禁。输入给 <code>test-case-generator</code> 的必须是澄清后的需求。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="badge badge-red">陷阱 2</span> 用例生成后不再修正</div>
+      <p><strong>症状</strong>：用例和实际代码脱节。<br>
+      <strong>对策</strong>：Phase 4 交叉验证是 ROI 最高的环节，不可跳过。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="badge badge-gold">陷阱 3</span> 盲目追求用例数量</div>
+      <p><strong>症状</strong>：500 条用例，300 条是冗余。<br>
+      <strong>对策</strong>：用例数量服从覆盖度，不服从"多就是好"。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="badge badge-gold">陷阱 4</span> 自动化脚本失败就报 Bug</div>
+      <p><strong>症状</strong>：报了一堆 Bug，一半是脚本自己的问题。<br>
+      <strong>对策</strong>：每个失败先过 Phase 7 决策树。先排查脚本，确认后才报产品 Bug。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="badge badge-gray">陷阱 5</span> 没有基线对比</div>
+      <p><strong>症状</strong>：回归测试说「通过了」，但没人知道上轮什么状态。<br>
+      <strong>对策</strong>：每次回归前记录基线，回归后对比增量。堵死"历史遗留"借口。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="badge badge-gray">陷阱 6</span> Code Review 和测试割裂</div>
+      <p><strong>症状</strong>：Code Review 发现了风险，但测试用例没有针对性加强。<br>
+      <strong>对策</strong>：Code Review 的每个 P0/P1 发现都要在 Phase 4 转化为测试用例。</p>
+    </div>
+  </section>
+
+  <!-- ===== SUMMARY ===== -->
+  <section>
+    <div class="section-label">09 / Summary</div>
+
+    <div class="summary-box">
+      <h3>如果只记三条</h3>
+      <ol>
+        <li><strong>需求不澄清就生成用例，等于在地基没打好的时候盖楼。</strong> Phase 0 是硬门禁，输入必须是澄清后的需求，不是原始 PRD。</li>
+        <li><strong>不看代码就测，等于闭着眼睛打靶。</strong> Phase 4 交叉验证是 ROI 最高的环节 — 需求 × 代码矩阵确保隐含分支不遗漏。</li>
+        <li><strong>自动化失败不等于 Bug，先排查脚本再报问题。</strong> Phase 7 决策树是建立开发信任的基础。</li>
+      </ol>
+    </div>
+
+    <blockquote>
+      <p>测试的本质不是「执行用例」，而是<strong>「证明需求被正确实现」</strong>。这套方法论把测试从一次性活动变成一个闭环：需求评审定义「什么是对的」，测试用例描述「怎么证明它对了」，代码交叉验证发现「实际做了什么」，自动化执行「快速证明」，结果分析「判断对错」，测试报告「给出结论」。</p>
+      <p>每一步都有证据。每一步都可追溯。</p>
+    </blockquote>
+
+    <p style="text-align: center; margin-top: 32px; font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; color: #6b6b6b;">
+      方法论不是一次定稿的，它是被每一轮测试的痛点驱动的。<br>先跑，撞墙了再补对应环节。
+    </p>
+  </section>
+
+  <!-- ===== LOOP ENGINEERING ===== -->
+  <section>
+    <div class="section-label">10 / Loop Engineering</div>
+    <h2>与 Loop Engineering 的关系</h2>
+
+    <blockquote>
+      <p>这套测试方法论本质上就是一个<strong>测试驱动的 Loop</strong> — 你不应该再手动提示 AI，你应该设计让 AI 自己持续运行的 Loop。</p>
+    </blockquote>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Loop Engineering 要素</th><th>测试方法论映射</th></tr></thead>
+        <tbody>
+          <tr><td><strong>自动触发器</strong></td><td>每次提测触发全流程；CI 失败触发回归</td></tr>
+          <tr><td><strong>技能文件（Skills）</strong></td><td>每个 Skill 就是一个 SKILL.md，固化为可复用资产</td></tr>
+          <tr><td><strong>子 Agent（Maker-Checker）</strong></td><td>三剑客交叉验证 = AI 审 AI</td></tr>
+          <tr><td><strong>持久记忆</strong></td><td>知识库（§00）= Loop 的记忆系统</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Loop 五阶段在测试中的体现</h3>
+    <div class="pipeline" style="gap: 4px;">
+      <div class="pipeline-phase p-review" style="border-radius: 4px;">
+        <div class="phase-num">Intent</div>
+        <div class="phase-name">意图</div>
+        <div class="phase-skill">Phase 0: 测试目标</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-generate" style="border-radius: 4px;">
+        <div class="phase-num">Context</div>
+        <div class="phase-name">上下文</div>
+        <div class="phase-skill">知识库检索</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-review-code" style="border-radius: 4px;">
+        <div class="phase-num">Action</div>
+        <div class="phase-name">行动</div>
+        <div class="phase-skill">生成+执行</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-cross" style="border-radius: 4px;">
+        <div class="phase-num">Observe</div>
+        <div class="phase-name">观察</div>
+        <div class="phase-skill">Phase 7: 结果分析</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-phase p-report" style="border-radius: 4px;">
+        <div class="phase-num">Adjust</div>
+        <div class="phase-name">调整</div>
+        <div class="phase-skill">Phase 4: 修正用例</div>
+      </div>
+    </div>
+
+    <blockquote>
+      <p>测试不是线性流程，而是闭环。每轮测试的经验沉淀进知识库，让下一轮更精准。<strong>Loop 跑得越久，知识库越厚，AI 越懂你的项目。</strong></p>
+    </blockquote>
+  </section>
+
+  <footer>
+    <p>AI Testing Methodology · Editorial Blueprint Style</p>
+    <em>2026.08.07</em>
+  </footer>
+
+</div>
+
+</body>
+</html>
