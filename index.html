@@ -53,6 +53,18 @@ body{font-family:var(--sans);color:var(--ink);min-height:100vh;font-size:13px;li
 .mast-note a{color:var(--terra);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--terra)}
 .mast-note a:hover{border-bottom-style:solid}
 
+/* ── 头版横幅：方法论全文 ── */
+.mast-feature{display:flex;align-items:center;gap:16px;margin-top:22px;background:var(--ink);color:var(--paper);
+  padding:16px 20px;text-decoration:none;box-shadow:6px 6px 0 rgba(184,134,11,.4);transition:.18s ease;
+  animation:rise .5s ease .26s both}
+.mast-feature:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 rgba(184,134,11,.55)}
+.mf-label{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;background:var(--gold);color:#fff;
+  padding:4px 9px;white-space:nowrap;font-weight:600;flex-shrink:0}
+.mf-body{flex:1;min-width:0}
+.mf-title{display:block;font-family:var(--serif);font-weight:700;font-size:clamp(16px,2.4vw,20px);letter-spacing:.3px}
+.mf-sub{display:block;font-family:var(--mono);font-size:10.5px;color:rgba(245,242,236,.62);letter-spacing:.4px;margin-top:4px}
+.mf-arrow{font-family:var(--mono);font-size:12.5px;color:var(--gold);white-space:nowrap;font-weight:700;flex-shrink:0}
+
 /* ── 分节 ── */
 .sec{max-width:1180px;margin:38px auto 0;padding:0 26px;animation:rise .55s ease both}
 .sec:nth-of-type(1){animation-delay:.28s}
@@ -194,7 +206,14 @@ body{font-family:var(--sans);color:var(--ink);min-height:100vh;font-size:13px;li
     <span>AI 质量工程</span>
   </div>
   <p class="mast-note"><b>数据声明</b> — 本页所有数据来自真实项目实测，工具链均已开源 — <a href="https://github.com/jerry00007/ai-testing-skills" target="_blank" rel="noopener">github.com/jerry00007/ai-testing-skills</a></p>
-  <p class="mast-note"><b>📘 代表作全文</b> — 《AI 驱动的测试全流程方法论》（11 Phase · 排版精校版）— <a href="/methodology.html">阅读全文 →</a></p>
+  <a class="mast-feature" href="/methodology.html">
+    <span class="mf-label">FEATURED · 代表作</span>
+    <span class="mf-body">
+      <span class="mf-title">《AI 驱动的测试全流程方法论》— 11 Phase 完整版</span>
+      <span class="mf-sub">三剑客多Agent评审 → AI用例生成 → 精准化测试 → 脚本自执行 → Bug归因 → 全流程 3 天 → 半天</span>
+    </span>
+    <span class="mf-arrow">阅读全文 →</span>
+  </a>
 </header>
 
 <section class="sec">
