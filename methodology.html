@@ -2106,9 +2106,59 @@
     </div>
   </section>
 
+  <!-- ===== CASE DESIGN ===== -->
+  <section>
+    <div class="section-label">10 / Case Design Method</div>
+    <h2>三层用例设计法：ISO 锚定 → 场景展开 → 证据闭环</h2>
+
+    <p>十维度框架是实战沉淀，但"维度够不够"长期靠经验自证。引入 ISO/IEC 25010 质量模型（6 特性 27 子特性）作为<strong>完备性锚点</strong>，配合领域量化基线与覆盖率证据链，形成可自检的三层设计法。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>层</th><th>做什么</th><th>输出物</th></tr></thead>
+        <tbody>
+          <tr><td><strong>L1 · 质量特性锚定</strong></td><td>需求点逐条标注覆盖 ISO 哪些子特性；27 子特性反向查漏——<strong>没有对应用例的子特性就是设计盲区</strong></td><td>需求 × 质量特性覆盖矩阵</td></tr>
+          <tr><td><strong>L2 · 场景展开</strong></td><td>十维度框架生成用例（AI 25×），每个维度配<strong>领域量化基线</strong>（响应时间 / TPS / 成功率等行业锚点），客户端走八域、支付走资金红线域</td><td>带 ID 与基线的用例集</td></tr>
+          <tr><td><strong>L3 · 证据闭环</strong></td><td>三层覆盖率证据链（第 8 章）+ 历史缺陷反例库 + 变异测试验证有效性</td><td>覆盖率报告与盲区清单</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>ISO 27 子特性对十维度的查漏结果</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>缺口子特性</th><th>含义</th><th>已补入位置</th></tr></thead>
+        <tbody>
+          <tr><td>互操作性</td><td>与其他产品/系统交换数据的能力（分享、深链、第三方登录）</td><td>十维度新增检查点</td></tr>
+          <tr><td>共存性</td><td>公共环境中与其他软件共存（双开、分身、后台被杀优先级）</td><td>客户端八域 ⑦</td></tr>
+          <tr><td>易替换性</td><td>替代同用途旧版本的能力（跨版本覆盖安装、数据迁移）</td><td>客户端八域 ⑦</td></tr>
+          <tr><td>依从性</td><td>国际/国家/行业/企业标准与法规一致性（隐私合规、广告标识、无障碍标准）</td><td>十维度新增检查点</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>领域量化基线示例（支付域）</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>指标</th><th>基线</th><th>来源</th></tr></thead>
+        <tbody>
+          <tr><td>支付页加载</td><td>&lt; 1.5s</td><td>行业公开实践</td></tr>
+          <tr><td>支付请求（P90）</td><td>&lt; 3s</td><td>行业公开实践</td></tr>
+          <tr><td>并发支付成功率</td><td>≥ 99%</td><td>行业公开实践</td></tr>
+          <tr><td>退款原路到账</td><td>实时 ~ T+1</td><td>监管要求</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">与 AI 生成的关系</div>
+      <p>L1 是 AI 生成前的<strong>完备性校验器</strong>（27 子特性作为生成约束的反向清单），L2 是生成主体，L3 是人工核验的抓手——三层法不改变 AI 主导的生成流程，只让"维度够不够"从经验判断变成<strong>对着权威模型查表</strong>。</p>
+    </div>
+  </section>
+
   <!-- ===== TRAPS ===== -->
   <section>
-    <div class="section-label">10 / Anti-Patterns</div>
+    <div class="section-label">11 / Anti-Patterns</div>
     <h2>常见陷阱与反模式</h2>
 
     <div class="card">
@@ -2150,7 +2200,7 @@
 
   <!-- ===== SUMMARY ===== -->
   <section>
-    <div class="section-label">11 / Summary</div>
+    <div class="section-label">12 / Summary</div>
 
     <div class="summary-box">
       <h3>如果只记三条</h3>
@@ -2173,7 +2223,7 @@
 
   <!-- ===== LOOP ENGINEERING ===== -->
   <section>
-    <div class="section-label">12 / Loop Engineering</div>
+    <div class="section-label">13 / Loop Engineering</div>
     <h2>与 Loop Engineering 的关系</h2>
 
     <blockquote>
