@@ -1183,7 +1183,24 @@
 </head>
 <body>
 
-<div class="container">
+<nav class="toc" id="toc"><div class="toc-title">◆ 大纲 / OUTLINE</div>
+<a href="#prologue-why-this-method">Prologue / Why This Me</a>
+<a href="#overview-full-pipeline">Overview / Full Pipeli</a>
+<a href="#00-knowledge-base">00 / Knowledge Base</a>
+<a href="#01-phase-0">01 / Phase 0</a>
+<a href="#02-phase-1">02 / Phase 1</a>
+<a href="#03-phase-3">03 / Phase 3</a>
+<a href="#04-phase-4-core">04 / Phase 4 ★ Core</a>
+<a href="#05-phase-6-7">05 / Phase 6-7</a>
+<a href="#06-phase-8-9">06 / Phase 8-9</a>
+<a href="#07-phase-10">07 / Phase 10</a>
+<a href="#08-coverage-proof">08 / Coverage Proof</a>
+<a href="#09-client-testing">09 / Client Testing</a>
+<a href="#10-case-design-method">10 / Case Design Metho</a>
+<a href="#11-anti-patterns">11 / Anti-Patterns</a>
+<a href="#12-summary">12 / Summary</a>
+<a href="#13-loop-engineering">13 / Loop Engineering</a>
+</nav><div class="container">
 
   <!-- ===== HERO ===== -->
   <div class="hero">
@@ -1201,7 +1218,22 @@
   </div>
 
   <!-- ===== WHY ===== -->
-  <section>
+  
+<section id="quick-guide" style="border:1.5px solid #d4d0c8;border-radius:8px;padding:26px 30px;margin-bottom:56px;background:#faf8f2">
+  <div class="section-label">快速导览 · FOR THE INTERVIEWER</div>
+  <h2 style="margin-bottom:6px">三句话讲完这套方法论</h2>
+  <p style="font-size:16px"><strong>一句话主张：</strong>测试体系从「经验驱动」升级为「<strong>AI 驱动 + 证据闭环</strong>」—— LLM Agent 嵌入 11 个 Phase 的测试全流程，<strong>每一步有量化门禁，每一个结论有证据链</strong>。</p>
+  <div class="guide-grid">
+    <div class="guide-stat"><div class="v">25×</div><div class="l">用例编写 4h→10min</div></div>
+    <div class="guide-stat"><div class="v">6×</div><div class="l">全流程 3天→半天</div></div>
+    <div class="guide-stat"><div class="v">100%</div><div class="l">需求覆盖可查表</div></div>
+  </div>
+  <h3 style="margin:18px 0 6px">按场景选讲述路线</h3>
+  <div class="route-card"><b>3 分钟版：</b>本导览 + Pipeline 总览（Overview / Ful）+ 三个数字，收尾甩作品集链接</div><div class="route-card"><b>技术深讲：</b>用例生成（01 / Pha）→ 自动执行核心（02 / Phase）→ 覆盖率证据链（06 / Pha）→ 三层用例设计法（08 / Cov）</div><div class="route-card"><b>AI 专讲：</b>三剑客评审（00 / Kno）→ 自动执行（02 / Phase）→ 人机边界与幻觉拦截（06 / Pha）</div><div class="route-card"><b>管理视角：</b>Pipeline 总览 → 反模式（09 / Cli）→ 总结（10 /）</div>
+  <h3 style="margin:18px 0 6px">全十四章地图（点击直达）</h3>
+  <div style="font-size:12.5px;line-height:2"><a class="map-link" href="#prologue-why-this-method">Prologue / Why This Methodology</a><br><a class="map-link" href="#overview-full-pipeline">Overview / Full Pipeline</a><br><a class="map-link" href="#00-knowledge-base">00 / Knowledge Base</a><br><a class="map-link" href="#01-phase-0">01 / Phase 0</a><br><a class="map-link" href="#02-phase-1">02 / Phase 1</a><br><a class="map-link" href="#03-phase-3">03 / Phase 3</a><br><a class="map-link" href="#04-phase-4-core">04 / Phase 4 ★ Core</a><br><a class="map-link" href="#05-phase-6-7">05 / Phase 6-7</a><br><a class="map-link" href="#06-phase-8-9">06 / Phase 8-9</a><br><a class="map-link" href="#07-phase-10">07 / Phase 10</a><br><a class="map-link" href="#08-coverage-proof">08 / Coverage Proof</a><br><a class="map-link" href="#09-client-testing">09 / Client Testing</a><br><a class="map-link" href="#10-case-design-method">10 / Case Design Method</a><br><a class="map-link" href="#11-anti-patterns">11 / Anti-Patterns</a><br><a class="map-link" href="#12-summary">12 / Summary</a><br><a class="map-link" href="#13-loop-engineering">13 / Loop Engineering</a></div>
+</section>
+<section id="prologue-why-this-method">
     <div class="section-label">Prologue / Why This Methodology</div>
     <h2>为什么需要这套方法论</h2>
 
@@ -1233,7 +1265,7 @@
   </section>
 
   <!-- ===== PIPELINE OVERVIEW ===== -->
-  <section>
+  <section id="overview-full-pipeline">
     <div class="section-label">Overview / Full Pipeline</div>
     <h2>方法论总览</h2>
 
@@ -1432,7 +1464,7 @@
     </svg>
     <p class="svg-caption">图 1：AI 驱动的测试全流程闭环 — 知识库在中心，为每个 Phase 供能</p>
   </section>
-  <section>
+  <section id="00-knowledge-base">
     <div class="section-label">00 / Knowledge Base</div>
     <h2>构建知识库 — <em>AI 的记忆体系基础</em></h2>
 
@@ -1588,7 +1620,7 @@
     </svg>
     <p class="svg-caption">图 2：知识库记忆体系 — 左侧来源 → 中心引擎 → 右侧流水线，底部经验沉淀回路</p>
   </section>
-  <section>
+  <section id="01-phase-0">
     <div class="section-label">01 / Phase 0</div>
     <h2>需求评审 — <em>把模糊变成可测</em></h2>
 
@@ -1630,7 +1662,7 @@
   </section>
 
   <!-- ===== PHASE 1 ===== -->
-  <section>
+  <section id="02-phase-1">
     <div class="section-label">02 / Phase 1</div>
     <h2>测试用例生成 V1 — <em>从需求到覆盖</em></h2>
 
@@ -1689,7 +1721,7 @@
   </section>
 
   <!-- ===== PHASE 3 ===== -->
-  <section>
+  <section id="03-phase-3">
     <div class="section-label">03 / Phase 3</div>
     <h2>Code Review — <em>不只是找 Bug，是理解代码做了什么</em></h2>
 
@@ -1728,7 +1760,7 @@
   </section>
 
   <!-- ===== PHASE 4 ===== -->
-  <section>
+  <section id="04-phase-4-core">
     <div class="section-label">04 / Phase 4 ★ Core</div>
     <h2>需求 × 代码交叉验证 — <em>全流水线 ROI 最高的一步</em></h2>
 
@@ -1907,7 +1939,7 @@
   </section>
 
   <!-- ===== PHASE 6-7 ===== -->
-  <section>
+  <section id="05-phase-6-7">
     <div class="section-label">05 / Phase 6-7</div>
     <h2>自动化测试 & 结果分析</h2>
 
@@ -1973,7 +2005,7 @@
   </section>
 
   <!-- ===== PHASE 8-9 ===== -->
-  <section>
+  <section id="06-phase-8-9">
     <div class="section-label">06 / Phase 8-9</div>
     <h2>缺陷反馈 & 回归测试</h2>
 
@@ -2018,7 +2050,7 @@
   </section>
 
   <!-- ===== PHASE 10 ===== -->
-  <section>
+  <section id="07-phase-10">
     <div class="section-label">07 / Phase 10</div>
     <h2>测试报告生成</h2>
 
@@ -2054,7 +2086,7 @@
   </section>
 
   <!-- ===== COVERAGE ===== -->
-  <section>
+  <section id="08-coverage-proof">
     <div class="section-label">08 / Coverage Proof</div>
     <h2>用例覆盖率的评估：三层证据链</h2>
 
@@ -2078,7 +2110,7 @@
   </section>
 
   <!-- ===== CLIENT ===== -->
-  <section>
+  <section id="09-client-testing">
     <div class="section-label">09 / Client Testing</div>
     <h2>客户端测试八域框架</h2>
 
@@ -2107,7 +2139,7 @@
   </section>
 
   <!-- ===== CASE DESIGN ===== -->
-  <section>
+  <section id="10-case-design-method">
     <div class="section-label">10 / Case Design Method</div>
     <h2>三层用例设计法：ISO 锚定 → 场景展开 → 证据闭环</h2>
 
@@ -2157,7 +2189,7 @@
   </section>
 
   <!-- ===== TRAPS ===== -->
-  <section>
+  <section id="11-anti-patterns">
     <div class="section-label">11 / Anti-Patterns</div>
     <h2>常见陷阱与反模式</h2>
 
@@ -2199,7 +2231,7 @@
   </section>
 
   <!-- ===== SUMMARY ===== -->
-  <section>
+  <section id="12-summary">
     <div class="section-label">12 / Summary</div>
 
     <div class="summary-box">
@@ -2222,7 +2254,7 @@
   </section>
 
   <!-- ===== LOOP ENGINEERING ===== -->
-  <section>
+  <section id="13-loop-engineering">
     <div class="section-label">13 / Loop Engineering</div>
     <h2>与 Loop Engineering 的关系</h2>
 
@@ -2287,5 +2319,10 @@
 
 </div>
 
-</body>
+<script>
+const links=[...document.querySelectorAll('#toc a')];
+const map={};links.forEach(a=>map[a.getAttribute('href').slice(1)]=a);
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.remove('active'));const a=map[e.target.id];if(a)a.classList.add('active');}})},{rootMargin:'-20% 0px -70% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>obs.observe(s));
+</script></body>
 </html>
