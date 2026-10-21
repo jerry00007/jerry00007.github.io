@@ -188,9 +188,27 @@ footer { border-top:1.5px solid var(--line); padding-top:20px; margin-top:60px; 
 </section>
 
 <section id="loop-eng">
-<div class="sec-label">§ 08 · Loop Engineering</div>
-<h2>与 Loop Engineering 的<em>关系</em></h2>
-<p>这套方法论本质上是一个<b>测试驱动的 Loop</b>。你不应该再手动提示 AI，而是设计让 AI 自己持续运行的循环：</p>
+<div class="sec-label">§ 08 · Loop Engineering & Harness</div>
+<h2>三道防线 与 <em>Loop Engineering 的落地</em></h2>
+
+<h3>三道防线（横穿全流程）</h3>
+<div class="tri">
+<div class="tri-card"><div class="t">防线一</div><div class="h">对抗</div><div class="b">三剑客多 Agent 红蓝互质询——单个模型的盲区被另两个角色揪出</div></div>
+<div class="tri-card"><div class="t">防线二</div><div class="h">程序验证</div><div class="b">事实类结论必须过独立程序断言（像素比对/裁判模型）——AI 说做了不算，程序说做了才算</div></div>
+<div class="tri-card"><div class="t">防线三</div><div class="h">量化门禁</div><div class="b">AI 产出不达标不进用例库——"新人拿到就知道：测什么、怎么测、过了说明什么"</div></div>
+</div>
+
+<h3>Harness Engineering：Rule / Skill / Scripts 三层分离</h3>
+<p>这三道防线的工程化载体，就是 <b>Harness</b>——把"怎么测"从人的脑子里拆出来，变成三层可维护的资产：</p>
+<table>
+<tr><th>层</th><th>是什么</th><th>我的落地物</th><th>谁改它</th></tr>
+<tr><td><b>Rule（规则）</b></td><td>硬约束——违反就不放行的量化标准（覆盖率下限、幻觉率红线、门禁阈值）</td><td>六项硬门禁 · CI 发布门禁 · 压测通过标准</td><td>架构师 / QA Lead</td></tr>
+<tr><td><b>Skill（技能）</b></td><td>可复用的方法论封装——"怎么做某类测试"的知识模块，带 Prompt、反例库和输出格式</td><td><b>9 个开源 AI 测试 Skill</b>（三剑客/用例生成/执行/归因/报告等）</td><td>资深测试 + AI 协作</td></tr>
+<tr><td><b>Scripts（脚本）</b></td><td>确定性执行代码——不需要 LLM 判断的重复操作（接口调用/断言/数据准备/结果收集）</td><td>1073 个 pytest 脚本 · mtTest 平台 · 像素引擎</td><td>测试开发</td></tr>
+</table>
+<div class="callout"><b>三层分离的价值：</b>Rule 是"什么算过"，Skill 是"怎么测"，Scripts 是"去执行"——职责清晰，改一层不动另外两层。换模型只改 Skill 层的 Prompt；调标准只改 Rule 层的阈值；加场景只加 Scripts 层的脚本。<b>我的 9 个开源 Skill 就是这三层的完整实现</b>（github.com/jerry00007/ai-testing-skills）。</div>
+
+<h3>Loop：让 AI 自己转起来</h3>
 <div class="cycle">
 <span>Intent 目标</span><em>→</em>
 <span>Context 知识库</span><em>→</em>
@@ -199,8 +217,7 @@ footer { border-top:1.5px solid var(--line); padding-top:20px; margin-top:60px; 
 <span>Adjust 修正用例</span><em>→</em>
 <span class="hot">Loop ↻</span>
 </div>
-<div class="callout"><b>9 个开源 Skill 就是这个 Loop 的具体实现</b>——每个 Skill 负责 Loop 的一环，组装起来就是完整的自驱动测试流水线。<br>
-<a href="https://github.com/jerry00007/ai-testing-skills">github.com/jerry00007/ai-testing-skills</a> · <a href="https://jerry00007.github.io/methodology.html">完整 15 章版</a></div>
+<p>这套方法论本质上是一个<b>测试驱动的 Loop</b>。你不应该再手动提示 AI，而是设计让 AI 自己持续运行的循环——Harness 三层（Rule / Skill / Scripts）就是 Loop 的引擎。</p>
 </section>
 
 <footer>
